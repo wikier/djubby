@@ -15,10 +15,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import logging
 from django.conf import settings
 from rdflib.Graph import ConjunctiveGraph
 from rdflib import Namespace
-import logging
 
 class Configuration:
     """Configuration using the Borg design pattern"""
@@ -31,7 +32,7 @@ class Configuration:
             if (path == None):
                 raise ValueError("djubby's configuration MUST be initialized a first time, read http://code.google.com/p/djubby/wiki/GettingStarted")
             else:
-                logging.debug("reading djubby's configuration from %s..." % path)
+                logging.debug("reading djubby's configuration from %s..." % os.path.abspath(path))
                 data = ConjunctiveGraph()
                 data.load(path, format='n3')
                 data.bind("conf", self.ns)  
