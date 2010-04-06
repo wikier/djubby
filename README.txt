@@ -30,9 +30,9 @@ Planned:
 Dependencies:
 ------------
 
-    * rdflib >= 2.4.0
+    * RDFLIB >= 2.4.0
     * SPARQLWrapper >= 1.3.2
-    * django >= 1.1.0
+    * Django >= 1.1.0
     * mimeparse >= 0.1.2
 
 
