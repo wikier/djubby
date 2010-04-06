@@ -29,7 +29,7 @@ class Configuration:
         self.__dict__ = self.__shared_state
         if (self.data == None):
             if (path == None):
-                raise ValueError("djubby's configuration MUST be initialized a first time")
+                raise ValueError("djubby's configuration MUST be initialized a first time, read http://code.google.com/p/djubby/wiki/GettingStarted")
             else:
                 logging.debug("reading djubby's configuration from %s..." % path)
                 data = ConjunctiveGraph()
