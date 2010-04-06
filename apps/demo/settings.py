@@ -78,6 +78,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 )
 
+import log
+
 DJUBBY_CONF = "config.n3"
 from djubby import Configuration
 conf = Configuration(DJUBBY_CONF)

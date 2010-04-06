@@ -15,28 +15,32 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from configuration import Configuration
 from resource import Resource
 from http import Http303, get_preferred_prefix, get_mimetype, url_handler
-import logging
 
 def dispatcher(request, ref=None):
-    logging.debug("dispatching '%s'..." % ref)
+    logging.debug("Dispatching request on '%s'..." % ref)
     if (ref == None or len(ref) == 0):
         conf = Configuration()
         index = conf.get_value("indexResource")
+        logging.debug("Redirecting to the index resource...")
         return HttpResponseRedirect(index)
     else:
         try:
             uri, prefix = url_handler(ref)
             resource = Resource(uri)
         except ValueError, ve:
+            logging.error("Error processing URI <%s>: %s" % (ref, str(ve)))
             raise Http404(ve)
 
         if (prefix == None):
-            return Http303("%s/%s" % (get_preferred_prefix(request),ref))
+            prefix = get_preferred_prefix(request)
+            logging.debug("Redirecting to the %s representation of %s" % (prefix, uri))
+            return Http303("%s/%s" % (prefix, ref))
         else:
-            #FIXME: HTML renderization
-            return HttpResponse(resource.get_data(), mimetype=get_mimetype(prefix))
+            logging.debug("Returning the %s representation of %s" % (prefix, uri))         
+            return HttpResponse(resource.get_data(), mimetype=get_mimetype(prefix)) #FIXME: HTML renderization
 

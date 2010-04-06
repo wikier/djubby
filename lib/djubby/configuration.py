@@ -32,7 +32,7 @@ class Configuration:
             if (path == None):
                 raise ValueError("djubby's configuration MUST be initialized a first time, read http://code.google.com/p/djubby/wiki/GettingStarted")
             else:
-                logging.debug("reading djubby's configuration from %s..." % os.path.abspath(path))
+                logging.debug("reading djubby's configuration from %s" % os.path.abspath(path))
                 data = ConjunctiveGraph()
                 data.load(path, format='n3')
                 data.bind("conf", self.ns)  

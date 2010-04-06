@@ -53,7 +53,7 @@
 # URIs on the Web:             http://127.0.0.1:8000/resource/*
     conf:dataset [
         # SPARQL endpoint URL of the dataset
-        conf:sparqlEndpoint <http://127.0.0.1:8890/sparql>;
+        conf:sparqlEndpoint <http://wopr:8890/sparql>;
         # Default graph name to query (not necessary for most endpoints)
         conf:sparqlDefaultGraph <http://example.org/djubby>;
         # Common URI prefix of all resource URIs in the SPARQL dataset
