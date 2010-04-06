@@ -47,7 +47,7 @@
     # be shown.
     conf:indexResource <http://127.0.0.1:8000/resource/sergio>;
 
-# Dataset configuration section #1 (for DBpedia resources)
+# Dataset configuration section
 #
 # URIs in the SPARQL endpoint: http://127.0.0.1:8890/sparql
 # URIs on the Web:             http://127.0.0.1:8000/resource/*
