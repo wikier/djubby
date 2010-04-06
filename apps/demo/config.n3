@@ -1,6 +1,6 @@
-# Pubby Example Configuration
+# djubby Example Configuration
 #
-# This configuration connects to the DBpedia SPARQL endpoint and
+# This configuration connects to the a SPARQL endpoint and
 # re-publishes on your local machine, with dereferenceable
 # localhost URIs.
 #
@@ -11,7 +11,7 @@
 # and make sure the config-file parameter in Pubby's web.xml
 # points to this configuration file.
 #
-# Then browse to http://localhost:8080/ .
+# Then browse to http://127.0.0.1:8000/
 
 # Prefix declarations to be used in RDF output
 @prefix conf: <http://richard.cyganiak.de/2007/pubby/config.rdf#> .
@@ -25,10 +25,6 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
-@prefix dbpedia: <http://localhost:8080/resource/> .
-@prefix p: <http://localhost:8080/property/> .
-@prefix yago: <http://localhost:8080/class/yago/> .
-@prefix units: <http://dbpedia.org/units/> .
 @prefix geonames: <http://www.geonames.org/ontology#> .
 @prefix prv:      <http://purl.org/net/provenance/ns#> .
 @prefix prvTypes: <http://purl.org/net/provenance/types#> .
@@ -53,11 +49,11 @@
 
 # Dataset configuration section #1 (for DBpedia resources)
 #
-# URIs in the SPARQL endpoint: http://dbpedia.org/resource/*
-# URIs on the Web:             http://localhost:8080/resource/*
+# URIs in the SPARQL endpoint: http://127.0.0.1:8890/sparql
+# URIs on the Web:             http://127.0.0.1:8000/resource/*
     conf:dataset [
         # SPARQL endpoint URL of the dataset
-        conf:sparqlEndpoint <http://wopr:8890/sparql>;
+        conf:sparqlEndpoint <http://127.0.0.1:8890/sparql>;
         # Default graph name to query (not necessary for most endpoints)
         conf:sparqlDefaultGraph <http://example.org/djubby>;
         # Common URI prefix of all resource URIs in the SPARQL dataset
@@ -83,3 +79,4 @@
 #        meta:endpointOperator <URI of the service provider who operates the SPARQL endpoint>;
     ];
     .
+
