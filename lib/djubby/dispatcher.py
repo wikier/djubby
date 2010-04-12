@@ -20,6 +20,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from configuration import Configuration
 from resource import Resource
 from http import Http303, get_preferred_prefix, get_mimetype, url_handler
+from urllib2 import URLError
 
 def dispatcher(request, ref=None):
     logging.debug("Dispatching request on '%s'..." % ref)
@@ -35,6 +36,9 @@ def dispatcher(request, ref=None):
         except ValueError, ve:
             logging.error("Error processing URI <%s>: %s" % (ref, str(ve)))
             raise Http404(ve)
+        except URLError, ue:
+            logging.error("Error retrieving URI <%s>: %s" % (ref, str(ue)))
+            raise Http404(ue)
 
         if (prefix == None):
             prefix = get_preferred_prefix(request)
