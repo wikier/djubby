@@ -20,6 +20,7 @@ import logging
 from django.conf import settings
 from rdflib.Graph import ConjunctiveGraph
 from rdflib import Namespace
+import rdf
 
 class Configuration:
     """Configuration using the Borg design pattern"""
@@ -40,8 +41,8 @@ class Configuration:
                 self.__class__.__dict__['_Configuration__shared_state']["data"] = data #FIXME
 
     def get_values(self, prop):
-        return self.data.objects(subject=None, predicate=self.ns[prop])
+        return rdf.get_values(self.data, self.ns[prop])
 
     def get_value(self, prop):
-        return str(self.get_values(prop).next())
+        return rdf.get_value(self.data, self.ns[prop])
 
