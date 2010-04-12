@@ -17,6 +17,7 @@
 
 from configuration import Configuration
 from SPARQLWrapper import SPARQLWrapper, JSON
+from django.template import Template, Context
 
 class Resource:
 
@@ -45,4 +46,9 @@ class Resource:
     def get_data(self):
         g = self.get_triples()
         return g.serialize(format="pretty-xml")
+
+    def get_page(self):
+        tpl = Template("URI: {{uri}}")
+        ctx = Context({"uri":self.uri})
+        return tpl.render(ctx)
 
