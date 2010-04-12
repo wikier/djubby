@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
-def get_values(self, graph, prop):
+def get_values(graph, prop):
     return graph.objects(subject=None, predicate=prop)
 
-def get_value(self, graph, prop):
+def get_value(graph, prop):
     return str(get_values(graph, prop).next())
 
