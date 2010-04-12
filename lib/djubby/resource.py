@@ -18,6 +18,7 @@
 from configuration import Configuration
 from SPARQLWrapper import SPARQLWrapper, JSON
 from django.template import Template, Context
+import rdf
 
 class Resource:
 
@@ -48,7 +49,20 @@ class Resource:
         return g.serialize(format="pretty-xml")
 
     def get_page(self):
-        tpl = Template("URI: {{uri}}")
-        ctx = Context({"uri":self.uri})
+        g = self.get_triples()
+        ns = getattr(Configuration, "_Configuration__shared_state")["ns"]
+        tpl = Template(self.__read_template__())
+        data = {}
+        data["uri"]      = self.uri
+        data["data"]     = "FIXME"
+        data["project"]  = rdf.get_value(ns["projectName"])
+        data["homelink"] = rdf.get_value(ns["projectHomepage"])
+        ctx = Context(data)
         return tpl.render(ctx)
+
+    def __read_template__(self):
+        f = open("resource.tpl", "r")
+        content = f.read()
+        f.close()
+        return content
 
