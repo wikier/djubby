@@ -34,10 +34,10 @@ def dispatcher(request, ref=None):
             uri, prefix = url_handler(ref)
             resource = Resource(uri)
         except ValueError, ve:
-            logging.error("Error processing URI <%s>: %s" % (ref, str(ve)))
+            logging.error("Error processing request for '%s': %s" % (ref, str(ve)))
             raise Http404(ve)
         except URLError, ue:
-            logging.error("Error retrieving URI <%s>: %s" % (ref, str(ue)))
+            logging.error("Error retrieving data for '%s': %s" % (ref, str(ue)))
             raise Http404(ue)
 
         if (prefix == None):
