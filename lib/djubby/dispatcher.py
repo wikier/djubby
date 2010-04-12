@@ -41,6 +41,8 @@ def dispatcher(request, ref=None):
             logging.debug("Redirecting to the %s representation of %s" % (prefix, uri))
             return Http303("%s/%s" % (prefix, ref))
         else:
-            logging.debug("Returning the %s representation of %s" % (prefix, uri))         
-            return HttpResponse(resource.get_data(), mimetype=get_mimetype(prefix)) #FIXME: HTML renderization
+            logging.debug("Returning the %s representation of %s" % (prefix, uri))
+            content = getattr(resource, "get_%s" % prefix)
+            mimetype = get_mimetype(prefix)
+            return HttpResponse(content, mimetype=mimetype)
 
