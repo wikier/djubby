@@ -46,7 +46,7 @@ def dispatcher(request, ref=None):
             return Http303("%s/%s" % (prefix, ref))
         else:
             logging.debug("Returning the %s representation of %s" % (prefix, uri))
-            content = getattr(resource, "get_%s" % prefix)
+            func = getattr(resource, "get_%s" % prefix)
             mimetype = get_mimetype(prefix)
-            return HttpResponse(content, mimetype=mimetype)
+            return HttpResponse(func(), mimetype=mimetype)
 
