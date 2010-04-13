@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import logging
 from configuration import Configuration
 from SPARQLWrapper import SPARQLWrapper, JSON
 from django.template import Template, Context
@@ -42,7 +44,9 @@ class Resource:
     def get_triples(self):
         sparql = SPARQLWrapper(self.endpoint)
         sparql.setQuery(self.queries["describe"] % (self.uri, self.graph))
-        return sparql.query().convert()
+        g = sparql.query().convert()
+        logging.debug("Returning %d triples describing resource <%s>" % (len(g), self.uri))
+        return g
 
     def get_data(self):
         g = self.get_triples()
@@ -60,8 +64,10 @@ class Resource:
         ctx = Context(data)
         return tpl.render(ctx)
 
-    def __read_template__(self):
-        f = open("resource.tpl", "r")
+    def __read_template__(self, name="resource"):
+        path = "%s/../tpl/%s.tpl" % (os.path.dirname(__file__), name)
+        logging.debug("Reading template from %s" % path)
+        f = open(path, "r")
         content = f.read()
         f.close()
         return content
