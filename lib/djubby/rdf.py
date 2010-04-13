@@ -19,13 +19,20 @@ from rdflib import URIRef
 import logging
 
 def get_values(graph, subject=None, predicate=None):
-    if (type(subject)==str or type(subject)==unicode):
-        subject = URIRef(subject)
-    return graph.objects(subject=subject, predicate=predicate)
+    return graph.objects(subject=str2uri(subject), predicate=predicate)
 
 def get_value(graph, subject=None, predicate=None):
     try:
         return str(get_values(graph, subject, predicate).next())
     except StopIteration:
         return ""
+
+def get_predicates(graph, subject=None):
+    return graph.predicate_objects(str2uri(subject))
+
+def str2uri(uri):
+    if (type(uri)==str or type(uri)==unicode):
+        return URIRef(uri)
+    else:
+        return uri
 
