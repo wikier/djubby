@@ -21,6 +21,7 @@ from configuration import Configuration
 from SPARQLWrapper import SPARQLWrapper, JSON
 from django.template import Template, Context
 import rdf
+import ns
 
 class Resource:
 
@@ -46,6 +47,7 @@ class Resource:
         sparql.setQuery(self.queries["describe"] % (self.uri, self.graph))
         g = sparql.query().convert()
         logging.debug("Returning %d triples describing resource <%s>" % (len(g), self.uri))
+        #FIXME: enrich with metadata
         return g
 
     def get_data(self):
@@ -54,19 +56,29 @@ class Resource:
 
     def get_page(self):
         g = self.get_triples()
-        ns = getattr(Configuration, "_Configuration__shared_state")["ns"]
         tpl = Template(self.__read_template__())
+        conf = Configuration()
+
         data = {}
         data["uri"]      = self.uri
-        data["data"]     = "FIXME"
-        data["project"]  = rdf.get_value(ns["projectName"])
-        data["homelink"] = rdf.get_value(ns["projectHomepage"])
+        label = rdf.get_value(g, ns.config["projectName"])
+        if (len(label)>0):
+            data["label"] = label
+        else:
+            data["label"] = self.uri
+        data["data"]  = "FIXME"
+        data["project"] = conf.get_value("projectName")
+        data["homelink"] = conf.get_value("projectHomepage")
+        depiction = rdf.get_value(g, ns.foaf["depiction"])
+        if (len(depiction)>0):
+            data["depiction"] = depiction
+
         ctx = Context(data)
         return tpl.render(ctx)
 
     def __read_template__(self, name="resource"):
         path = "%s/../tpl/%s.tpl" % (os.path.dirname(__file__), name)
-        logging.debug("Reading template from %s" % path)
+        logging.debug("Reading template '%s' from %s" % (name, path))
         f = open(path, "r")
         content = f.read()
         f.close()

@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Catedral de San Salvador o la Seo | Cruzar</title>
-    <link rel="alternate" type="application/rdf+xml" href="http://www.zaragoza.es/turruta/resource/data/Monumento/0" title="RDF" />
+    <title>{{label}} | {{project}}</title>
+    <link rel="alternate" type="application/rdf+xml" href="{{data}}" title="RDF" />
     <style type="text/css">
 		html { margin: 0; padding: 0; }
 		body { font-family: sans-serif; font-size: 80%; margin: 0; padding: 1.2em 2em; }
@@ -63,7 +63,7 @@
 
     <div id="header">
       <div>
-        <h1 id="title">{{name}}</h1>
+        <h1 id="title">{{label}}</h1>
         <div id="homelink">at <a href="{{homelink}}">{{project}}</a></div>
       </div>
       <div class="page-resource-uri"><a href="{{uri}}">{{uri}}</a></div>
@@ -72,7 +72,7 @@
     </div>
 
     {% if depiction %}
-        <div class="image"><img src="{{depiction}}" alt="Depiction of {{name}}" /></div>
+        <div class="image"><img src="{{depiction}}" alt="Depiction of {{label}}" /></div>
     {% endif %}
 
   </body>

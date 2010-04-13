@@ -19,13 +19,13 @@ import os
 import logging
 from django.conf import settings
 from rdflib.Graph import ConjunctiveGraph
-from rdflib import Namespace
 import rdf
+import ns
 
 class Configuration:
     """Configuration using the Borg design pattern"""
 
-    __shared_state = { "data" : None, "path" : None, "ns" : Namespace("http://richard.cyganiak.de/2007/pubby/config.rdf#") }
+    __shared_state = { "data" : None, "path" : None }
 
     def __init__(self, path=None):
         self.__dict__ = self.__shared_state
@@ -36,13 +36,13 @@ class Configuration:
                 logging.debug("reading djubby's configuration from %s" % os.path.abspath(path))
                 data = ConjunctiveGraph()
                 data.load(path, format='n3')
-                data.bind("conf", self.ns)  
+                data.bind("conf", ns.config)  
                 self.data = data
                 self.__class__.__dict__['_Configuration__shared_state']["data"] = data #FIXME
 
     def get_values(self, prop):
-        return rdf.get_values(self.data, self.ns[prop])
+        return rdf.get_values(self.data, ns.config[prop])
 
     def get_value(self, prop):
-        return rdf.get_value(self.data, self.ns[prop])
+        return rdf.get_value(self.data, ns.config[prop])
 
