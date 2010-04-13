@@ -42,6 +42,6 @@ setup(
       ],
       keywords = 'python django rdf sparql linkeddata',
       scripts = ['ez_setup.py'],
-      data_files = [ ('tpl', ['djubby/tpl/resource.tpl']) ]
+      data_files = [ ('tpl', ['tpl/resource.tpl']) ]
 )
 
