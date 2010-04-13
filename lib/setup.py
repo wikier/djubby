@@ -22,7 +22,7 @@ from setuptools import setup, find_packages
  
 setup(
       name='djubby',
-      version='0.0.1',
+      version='0.1.0',
       description='A Pubby clone for Django, a Linked Data frontend for SPARQL endpoints',
       license = 'GNU Library or Lesser General Public License (LGPL) v3',
       author='Sergio Fernández',
