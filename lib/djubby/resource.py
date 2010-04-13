@@ -73,8 +73,20 @@ class Resource:
         if (len(depiction)>0):
             data["depiction"] = depiction
 
+        data["rows"] = self.__get_rows__(g)
+
         ctx = Context(data)
         return tpl.render(ctx)
+
+    def __get_rows__(self, g):
+        rows = {}
+        for p, o in rdf.get_predicates(g, self.uri):
+            p = str(p)
+            if (not rows.has_key(p)):
+                rows[p] = []
+            rows[p].append(o)
+        return rows
+        
 
     def __read_template__(self, name="resource"):
         path = "%s/../tpl/%s.tpl" % (os.path.dirname(__file__), name)

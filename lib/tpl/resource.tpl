@@ -75,6 +75,35 @@
         <div class="image"><img src="{{depiction}}" alt="Depiction of {{label}}" /></div>
     {% endif %}
 
+    <table class="description">
+      <tr>
+        <th width="25%">Property</th>
+        <th>Value/s</th>
+      </tr>
+      {% for prop, values in rows.items %}
+      <tr>
+        <td class="property">
+          <a class="uri" href="{{prop}}" title="{{prop}}">{{prop}}</a>
+        </td>
+        <td>
+          <ul>
+            {% for value in values%}
+            <li>
+              <span class="literal">
+                {{value}}
+                {% if value.language %}
+                <small>(value.language)</small>
+                {% endif %}
+              </span>
+            </li>
+            {% endfor %}
+          </ul>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+
   </body>
 
 </html>
