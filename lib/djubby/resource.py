@@ -66,7 +66,9 @@ class Resource:
             data["label"] = label
         else:
             data["label"] = self.uri
-        data["data"]  = "FIXME"
+        base = conf.get_value("datasetBase")
+        if (base[-1]=="/"): base = base[:-1]
+        data["data"]  = self.uri.replace(base, "%s/%s" % (base, "data"))
         data["project"] = conf.get_value("projectName")
         data["homelink"] = conf.get_value("projectHomepage")
         depiction = rdf.get_value(g, self.uri, ns.foaf["depiction"])
