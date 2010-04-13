@@ -41,8 +41,8 @@ class Configuration:
                 self.__class__.__dict__['_Configuration__shared_state']["data"] = data #FIXME
 
     def get_values(self, prop):
-        return rdf.get_values(self.data, ns.config[prop])
+        return rdf.get_values(self.data, predicate=ns.config[prop])
 
     def get_value(self, prop):
-        return rdf.get_value(self.data, ns.config[prop])
+        return rdf.get_value(self.data, predicate=ns.config[prop])
 

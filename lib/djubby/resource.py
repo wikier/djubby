@@ -61,7 +61,7 @@ class Resource:
 
         data = {}
         data["uri"]      = self.uri
-        label = rdf.get_value(g, ns.config["projectName"])
+        label = rdf.get_value(g, self.uri, ns.rdfs["label"])
         if (len(label)>0):
             data["label"] = label
         else:
@@ -69,7 +69,7 @@ class Resource:
         data["data"]  = "FIXME"
         data["project"] = conf.get_value("projectName")
         data["homelink"] = conf.get_value("projectHomepage")
-        depiction = rdf.get_value(g, ns.foaf["depiction"])
+        depiction = rdf.get_value(g, self.uri, ns.foaf["depiction"])
         if (len(depiction)>0):
             data["depiction"] = depiction
 

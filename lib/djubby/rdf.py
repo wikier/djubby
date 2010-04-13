@@ -15,12 +15,17 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
-def get_values(graph, prop):
-    return graph.objects(subject=None, predicate=prop)
+from rdflib import URIRef
+import logging
 
-def get_value(graph, prop):
+def get_values(graph, subject=None, predicate=None):
+    if (type(subject)==str or type(subject)==unicode):
+        subject = URIRef(subject)
+    return graph.objects(subject=subject, predicate=predicate)
+
+def get_value(graph, subject=None, predicate=None):
     try:
-        return str(get_values(graph, prop).next())
+        return str(get_values(graph, subject, predicate).next())
     except StopIteration:
         return ""
 
