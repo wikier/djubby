@@ -19,5 +19,8 @@ def get_values(graph, prop):
     return graph.objects(subject=None, predicate=prop)
 
 def get_value(graph, prop):
-    return str(get_values(graph, prop).next())
+    try:
+        return str(get_values(graph, prop).next())
+    except StopIteration:
+        return ""
 
