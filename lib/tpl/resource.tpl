@@ -81,7 +81,7 @@
         <th>Value/s</th>
       </tr>
       {% for prop, values in rows.items %}
-      <tr>
+      <tr class="even">
         <td class="property">
           <a class="uri" href="{{prop}}" title="{{prop}}">{{prop}}</a>
         </td>
