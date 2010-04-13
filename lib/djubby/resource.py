@@ -22,6 +22,8 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from django.template import Template, Context
 import rdf
 import ns
+from rdflib import URIRef
+from rdflib import Literal
 
 class Resource:
 
@@ -86,7 +88,20 @@ class Resource:
             p = str(p)
             if (not rows.has_key(p)):
                 rows[p] = []
-            rows[p].append(o)
+            if (type(o) == URIRef):
+                item = {}
+                item["uri"] = unicode(o)
+                item["label"] = unicode(o) #FIXME: CURIE
+                rows[p].append(item)
+            elif (type(o) == Literal):
+                item = {}
+                item["literal"] = unicode(o)
+                if (o.language):
+                    item["language"] = o.language
+                #FIXME: xsd datatypes
+                rows[p].append(item)
+            else:
+                rows[p].append(o)
         return rows
         
 
