@@ -73,6 +73,7 @@ class Resource:
         data["data"]  = self.uri.replace(base, "%s/%s" % (base, "data"))
         data["project"] = conf.get_value("projectName")
         data["homelink"] = conf.get_value("projectHomepage")
+        data["endpoint"] = conf.get_value("sparqlEndpoint")
         depiction = rdf.get_value(g, self.uri, ns.foaf["depiction"])
         if (len(depiction)>0):
             data["depiction"] = depiction
@@ -103,7 +104,6 @@ class Resource:
             else:
                 rows[p].append(o)
         return rows
-        
 
     def __read_template__(self, name="resource"):
         path = "%s/../tpl/%s.tpl" % (os.path.dirname(__file__), name)
