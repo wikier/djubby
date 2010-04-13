@@ -112,6 +112,17 @@
       {% endfor %}
     </table>
 
+    <div id="footer">
+      This page shows information obtained from the SPARQL endpoint at <a class="sparql-uri" href="{{endpoint}}">{{endpoint}}</a>.<br />
+      <!--<a href="{{data}}?output=n3">As N3</a> | -->
+      <a href="{{data}}">As RDF/XML</a>
+      |
+      <a href="http://www4.wiwiss.fu-berlin.de/rdf_browser/?browse_uri={{uri}}">Browse in Disco</a>
+      |
+      <a href="http://dig.csail.mit.edu/2005/ajar/ajaw/tab.html?uri={{uri}}">Browse in Tabulator</a>
+      |
+      <a href="http://linkeddata.uriburner.com/ode/?uri={{uri}}l">Browse in OpenLink Data Explorer</a>
+    </div>
 
   </body>
 
