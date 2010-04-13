@@ -89,12 +89,17 @@
           <ul>
             {% for value in values%}
             <li>
+              {% if value.abstract %}
+              <a class="uri" href="{{value}}" title="{{value}}">{{value}}</a>
+              {% else %}
               <span class="literal">
-                {{value}}
                 {% if value.language %}
-                <small>(value.language)</small>
+                <span xml:lang="{{value.languaje}}">{{value}}</span> <small>({{value.language}})</small>
+                {% else %}
+                {{value}}
                 {% endif %}
               </span>
+              {% endif %}
             </li>
             {% endfor %}
           </ul>
