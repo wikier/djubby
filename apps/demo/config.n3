@@ -1,17 +1,16 @@
 # djubby Example Configuration
 #
-# This configuration connects to the a SPARQL endpoint and
+# This configuration connects to the DBpedia SPARQL endpoint and
 # re-publishes on your local machine, with dereferenceable
 # localhost URIs.
 #
 # This assumes you already have a servlet container running
 # on your machine at http://localhost:8080/ .
 #
-# Install Pubby as the root webapp of your servlet container,
-# and make sure the config-file parameter in Pubby's web.xml
+# Install djubby library and make sure the django's settings.py
 # points to this configuration file.
 #
-# Then browse to http://127.0.0.1:8000/
+# Start your application, and then browse to http://127.0.0.1:8000/ 
 
 # Prefix declarations to be used in RDF output
 @prefix conf: <http://richard.cyganiak.de/2007/pubby/config.rdf#> .
@@ -25,6 +24,10 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix p: <http://dbpedia.org/property/> .
+@prefix yago: <http://dbpedia.org/class/yago/> .
+@prefix units: <http://dbpedia.org/units/> .
 @prefix geonames: <http://www.geonames.org/ontology#> .
 @prefix prv:      <http://purl.org/net/provenance/ns#> .
 @prefix prvTypes: <http://purl.org/net/provenance/types#> .
@@ -32,11 +35,11 @@
 # Server configuration section
 <> a conf:Configuration;
     # Project name for display in page titles
-    conf:projectName "djubby demo";
+    conf:projectName "djubby demo with dbpedia";
     # Homepage with description of the project for the link in the page header
-    conf:projectHomepage <http://127.0.0.1:8000/>;
+    conf:projectHomepage <http://dbpedia.org>;
     # The Pubby root, where the webapp is running inside the servlet container.
-    conf:webBase <http://127.0.0.1:8000/>;
+    conf:webBase <http://127.0.0.1:8000/resource/>;
     # URL of an RDF file whose prefix mapping is to be used by the
     # server; defaults to <>, which is *this* file.
     conf:usePrefixesFrom <>;
@@ -45,19 +48,19 @@
     conf:defaultLanguage "en";
     # When the homepage of the server is accessed, this resource will
     # be shown.
-    conf:indexResource <http://127.0.0.1:8000/resource/sergio>;
+    conf:indexResource <http://dbpedia.org/resource/Wikipedia>;
 
-# Dataset configuration section
+# Dataset configuration section #1 (for DBpedia resources)
 #
-# URIs in the SPARQL endpoint: http://127.0.0.1:8890/sparql
-# URIs on the Web:             http://127.0.0.1:8000/resource/*
+# URIs in the SPARQL endpoint: http://dbpedia.org/resource/*
+# URIs on the Web:             http://localhost:8080/resource/*
     conf:dataset [
         # SPARQL endpoint URL of the dataset
-        conf:sparqlEndpoint <http://wopr:8890/sparql>;
+        conf:sparqlEndpoint <http://dbpedia.org/sparql>;
         # Default graph name to query (not necessary for most endpoints)
-        conf:sparqlDefaultGraph <http://example.org/djubby>;
+        conf:sparqlDefaultGraph <http://dbpedia.org>;
         # Common URI prefix of all resource URIs in the SPARQL dataset
-        conf:datasetBase <http://127.0.0.1:8000/resource/>;
+        conf:datasetBase <http://dbpedia.org/resource/>;
         # Will be appended to the conf:webBase to form the public
         # resource URIs; if not present, defaults to ""
         conf:webResourcePrefix "resource/";
@@ -78,5 +81,6 @@
 #        meta:endpointUser <URI of the data publisher who uses the SPARQL endpoint queried by this Pubby>;
 #        meta:endpointOperator <URI of the service provider who operates the SPARQL endpoint>;
     ];
+
     .
 
