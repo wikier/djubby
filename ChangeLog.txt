@@ -1,6 +1,10 @@
 djubby's changelog:
 ------------------
 
+0.1.2 (15/04/2010):
+  * Allowing to serve resources from different web base URI
+  * Added support to ASK queries over Virtuoso endpoints
+
 0.1.1 (13/04/2010):
   * Added some cosmetic details to the HTML renderization
 
