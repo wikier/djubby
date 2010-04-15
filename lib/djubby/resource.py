@@ -73,16 +73,16 @@ class Resource:
         conf = Configuration()
 
         data = {}
-        data["uri"]      = self.uri
+        data["uri"] = self.uri
         lang = conf.get_value("defaultLanguage")
         label = rdf.get_value(g, self.uri, ns.rdfs["label"], lang)
         if (len(label)>0):
             data["label"] = label
         else:
             data["label"] = self.uri
-        base = conf.get_value("datasetBase")
-        if (base[-1]=="/"): base = base[:-1]
-        data["data"]  = self.uri.replace(base, "%s/%s" % (base, "data"))
+        datasetBase = conf.get_value("datasetBase")
+        webBase = conf.get_value("webBase")
+        data["data"]  = self.uri.replace(datasetBase, "%s%s" % (webBase, "data"))
         data["project"] = conf.get_value("projectName")
         data["homelink"] = conf.get_value("projectHomepage")
         data["endpoint"] = conf.get_value("sparqlEndpoint")
