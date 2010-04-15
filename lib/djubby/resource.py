@@ -33,15 +33,26 @@ class Resource:
               }
 
     def __init__(self, uri):
+        logging.debug("trying to build resource with URI <%s>..." % uri)
         self.uri = uri
         conf = Configuration()
         self.graph = conf.get_value("sparqlDefaultGraph")
         self.endpoint = conf.get_value("sparqlEndpoint")
         sparql = SPARQLWrapper(self.endpoint)
-        sparql.setQuery(self.queries["ask"] % (self.graph, self.uri))
+        query = self.queries["ask"] % (self.graph, self.uri)
+        sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
-        if (not results["boolean"]):
+        if (results.has_key("boolean")):
+            # expected answer according SPARQL Protocol
+            if (not results["boolean"]):
+                raise ValueError("URI not found on this dataset")
+        elif (results.has_key("results") and results["results"].has_key("bindings") and len(results["results"]["bindings"])>0):
+            # I don't know why, but virtuoso sometimes uses __ask_retval
+            # http://docs.openlinksw.com/virtuoso/rdfsparql.html
+            if (not bool(results["results"]["bindings"][0]["__ask_retval"]["value"])):
+                raise ValueError("URI not found on this dataset")
+        else:
             raise ValueError("URI not found on this dataset")
 
     def get_triples(self):
