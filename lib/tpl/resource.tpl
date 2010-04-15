@@ -83,7 +83,7 @@
       {% for prop, values in rows.items %}
       <tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
         <td class="property">
-          <a class="uri" href="{{prop}}" title="{{prop}}">{{prop}}</a>
+          <a class="uri" href="{{prop.uri}}" title="{{prop.uri}}">{{prop.label}}</a>
         </td>
         <td>
           <ul>

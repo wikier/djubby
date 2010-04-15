@@ -16,7 +16,6 @@
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
 from rdflib import URIRef
-import logging
 
 def get_values(graph, subject=None, predicate=None):
     return graph.objects(subject=str2uri(subject), predicate=predicate)
@@ -42,4 +41,13 @@ def str2uri(uri):
         return URIRef(uri)
     else:
         return uri
+
+class URI:
+
+    def __init__(self, uri, label=None):
+        self.uri = uri
+        self.label = label
+
+    def __str__(self):
+        return self.uri
 

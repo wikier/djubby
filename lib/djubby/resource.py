@@ -35,9 +35,9 @@ class Resource:
     def __init__(self, uri):
         logging.debug("trying to build resource with URI <%s>..." % uri)
         self.uri = uri
-        conf = Configuration()
-        self.graph = conf.get_value("sparqlDefaultGraph")
-        self.endpoint = conf.get_value("sparqlEndpoint")
+        self.conf = Configuration()
+        self.graph = self.conf.get_value("sparqlDefaultGraph")
+        self.endpoint = self.conf.get_value("sparqlEndpoint")
         sparql = SPARQLWrapper(self.endpoint)
         query = self.queries["ask"] % (self.graph, self.uri)
         sparql.setQuery(query)
@@ -70,22 +70,21 @@ class Resource:
     def get_page(self):
         g = self.get_triples()
         tpl = Template(self.__read_template__())
-        conf = Configuration()
 
         data = {}
         data["uri"] = self.uri
-        lang = conf.get_value("defaultLanguage")
+        lang = self.conf.get_value("defaultLanguage")
         label = rdf.get_value(g, self.uri, ns.rdfs["label"], lang)
         if (len(label)>0):
             data["label"] = label
         else:
             data["label"] = self.uri
-        datasetBase = conf.get_value("datasetBase")
-        webBase = conf.get_value("webBase")
+        datasetBase = self.conf.get_value("datasetBase")
+        webBase = self.conf.get_value("webBase")
         data["data"]  = self.uri.replace(datasetBase, "%s%s/" % (webBase, "data"))
-        data["project"] = conf.get_value("projectName")
-        data["homelink"] = conf.get_value("projectHomepage")
-        data["endpoint"] = conf.get_value("sparqlEndpoint")
+        data["project"] = self.conf.get_value("projectName")
+        data["homelink"] = self.conf.get_value("projectHomepage")
+        data["endpoint"] = self.conf.get_value("sparqlEndpoint")
         depiction = rdf.get_value(g, self.uri, ns.foaf["depiction"])
         if (len(depiction)>0):
             data["depiction"] = depiction
@@ -98,23 +97,20 @@ class Resource:
     def __get_rows__(self, g):
         rows = {}
         for p, o in rdf.get_predicates(g, self.uri):
-            p = str(p)
-            if (not rows.has_key(p)):
-                rows[p] = []
+            prop = rdf.URI(unicode(p), ns.uri2curie(unicode(p), self.conf.data.namespaces()))
+            if (not rows.has_key(prop)):
+                rows[prop] = []
             if (type(o) == URIRef):
-                item = {}
-                item["uri"] = unicode(o)
-                item["label"] = unicode(o) #FIXME: CURIE
-                rows[p].append(item)
+                rows[prop].append(rdf.URI(unicode(o), ns.uri2curie(unicode(o), self.conf.data.namespaces())))
             elif (type(o) == Literal):
                 item = {}
                 item["literal"] = unicode(o)
                 if (o.language):
                     item["language"] = o.language
                 #FIXME: xsd datatypes
-                rows[p].append(item)
+                rows[prop].append(item)
             else:
-                rows[p].append(o)
+                rows[prop].append(o)
         return rows
 
     def __read_template__(self, name="resource"):
