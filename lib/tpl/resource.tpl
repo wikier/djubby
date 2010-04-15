@@ -121,7 +121,7 @@
       |
       <a href="http://dig.csail.mit.edu/2005/ajar/ajaw/tab.html?uri={{uri}}">Browse in Tabulator</a>
       |
-      <a href="http://linkeddata.uriburner.com/ode/?uri={{uri}}l">Browse in OpenLink Data Explorer</a>
+      <a href="http://linkeddata.uriburner.com/ode/?uri={{uri}}">Browse in OpenLink Data Explorer</a>
     </div>
 
   </body>
