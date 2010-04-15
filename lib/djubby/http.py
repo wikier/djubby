@@ -60,20 +60,16 @@ def url_handler(ref):
     uri = None
     prefix = None
     conf = Configuration()
-    base = conf.get_value("datasetBase")
-    if (ref.startswith("http://")):
-        if (not ref.startswith(base)):
-            raise ValueError("Invalid URI for this dataset")
-        else:
-            ref = ref[len(base):]
+    datasetBase = conf.get_value("datasetBase")
+    webBase = conf.get_value("webBase")
 
     splitted = ref.split("/")
     if (splitted[0] in get_supported_prefixes()):
         prefix = splitted[0]
-        uri = base + "/".join(splitted[1:])
+        uri = datasetBase + "/".join(splitted[1:])
     else:
         prefix = None
-        uri = base + ref
+        uri = datasetBase + ref
     return uri, prefix
 
 class Http303(HttpResponseRedirect):

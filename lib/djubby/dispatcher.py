@@ -27,6 +27,7 @@ def dispatcher(request, ref=None):
     if (ref == None or len(ref) == 0):
         conf = Configuration()
         index = conf.get_value("indexResource")
+        index = index.replace(conf.get_value("datasetBase"), conf.get_value("webBase"))
         logging.debug("Redirecting to the index resource...")
         return HttpResponseRedirect(index)
     else:
