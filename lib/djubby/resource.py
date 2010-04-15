@@ -107,7 +107,8 @@ class Resource:
                 item["literal"] = unicode(o)
                 if (o.language):
                     item["language"] = o.language
-                #FIXME: xsd datatypes
+                if (o.datatype):
+                    item["datatype"] = ns.uri2curie(o.datatype, self.conf.data.namespaces())
                 rows[prop].append(item)
             else:
                 rows[prop].append(o)

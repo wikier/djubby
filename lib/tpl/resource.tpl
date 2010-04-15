@@ -99,6 +99,9 @@
                 {% else %}
                 {{value.literal}}
                 {% endif %}
+                {% if value.datatype %}
+                <small>({{value.datatype}})</small>
+                {% endif %}
               </span>
               {% else %}
               {{value}}
