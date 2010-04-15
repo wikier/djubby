@@ -27,18 +27,3 @@ dct    = Namespace("http://purl.org/dc/terms/")
 skos   = Namespace("http://www.w3.org/2004/02/skos/core#")
 foaf   = Namespace("http://xmlns.com/foaf/0.1/")
 
-def uri2curie(uri, namespaces):
-    url, fragment = splitUri(uri)
-    for prefix, ns in namespaces: #improve the performace of this operation       
-        if (unicode(ns) == url):
-            return "%s:%s" % (prefix, fragment)
-    return uri
-
-def splitUri(uri):
-    if ("#" in uri):
-        splitted = uri.split("#")
-        return ("%s#"%splitted[0], splitted[1])
-    else:
-        splitted = uri.split("/")
-        return ("/".join(splitted[:-1])+"/", splitted[-1])
-

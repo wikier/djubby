@@ -17,6 +17,18 @@
 
 from rdflib import URIRef
 
+class URI:
+
+    def __init__(self, uri, label=None):
+        if (type(uri)==URIRef):
+            self.uri = unicode(uri)
+        else:
+            self.uri = uri
+        self.label = label
+
+    def __str__(self):
+        return self.uri
+
 def get_values(graph, subject=None, predicate=None):
     return graph.objects(subject=str2uri(subject), predicate=predicate)
 
@@ -42,12 +54,18 @@ def str2uri(uri):
     else:
         return uri
 
-class URI:
+def uri2curie(uri, namespaces):
+    url, fragment = splitUri(uri)
+    for prefix, ns in namespaces: #improve the performace of this operation       
+        if (unicode(ns) == url):
+            return "%s:%s" % (prefix, fragment)
+    return uri
 
-    def __init__(self, uri, label=None):
-        self.uri = uri
-        self.label = label
-
-    def __str__(self):
-        return self.uri
+def splitUri(uri):
+    if ("#" in uri):
+        splitted = uri.split("#")
+        return ("%s#"%splitted[0], splitted[1])
+    else:
+        splitted = uri.split("/")
+        return ("/".join(splitted[:-1])+"/", splitted[-1])
 

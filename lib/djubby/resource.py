@@ -97,18 +97,18 @@ class Resource:
     def __get_rows__(self, g):
         rows = {}
         for p, o in rdf.get_predicates(g, self.uri):
-            prop = rdf.URI(unicode(p), ns.uri2curie(unicode(p), self.conf.data.namespaces()))
+            prop = rdf.URI(unicode(p), rdf.uri2curie(unicode(p), self.conf.data.namespaces()))
             if (not rows.has_key(prop)):
                 rows[prop] = []
             if (type(o) == URIRef):
-                rows[prop].append(rdf.URI(unicode(o), ns.uri2curie(unicode(o), self.conf.data.namespaces())))
+                rows[prop].append(rdf.URI(unicode(o), rdf.uri2curie(unicode(o), self.conf.data.namespaces())))
             elif (type(o) == Literal):
                 item = {}
                 item["literal"] = unicode(o)
                 if (o.language):
                     item["language"] = o.language
                 if (o.datatype):
-                    item["datatype"] = ns.uri2curie(o.datatype, self.conf.data.namespaces())
+                    item["datatype"] = rdf.uri2curie(o.datatype, self.conf.data.namespaces())
                 rows[prop].append(item)
             else:
                 rows[prop].append(o)
