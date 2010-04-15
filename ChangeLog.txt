@@ -1,6 +1,9 @@
 djubby's changelog:
 ------------------
 
+0.1.3 (DD/MM/YYYY):
+  * Implemented default language
+
 0.1.2 (15/04/2010):
   * Allowing to serve resources from different web base URI
   * Added support to ASK queries over Virtuoso endpoints

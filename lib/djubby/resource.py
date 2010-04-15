@@ -74,7 +74,8 @@ class Resource:
 
         data = {}
         data["uri"]      = self.uri
-        label = rdf.get_value(g, self.uri, ns.rdfs["label"])
+        lang = conf.get_value("defaultLanguage")
+        label = rdf.get_value(g, self.uri, ns.rdfs["label"], lang)
         if (len(label)>0):
             data["label"] = label
         else:

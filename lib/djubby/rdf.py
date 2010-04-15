@@ -21,10 +21,17 @@ import logging
 def get_values(graph, subject=None, predicate=None):
     return graph.objects(subject=str2uri(subject), predicate=predicate)
 
-def get_value(graph, subject=None, predicate=None):
-    try:
-        return str(get_values(graph, subject, predicate).next())
-    except StopIteration:
+def get_value(graph, subject=None, predicate=None, lang=None):
+    if (lang == None):
+        try:
+            return str(get_values(graph, subject, predicate).next())
+        except StopIteration:
+            return ""
+    else:
+        values = get_values(graph, subject, predicate)
+        for value in values:
+            if (value.language == lang):
+                return value
         return ""
 
 def get_predicates(graph, subject=None):
