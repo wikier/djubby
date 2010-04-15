@@ -81,7 +81,7 @@
         <th>Value/s</th>
       </tr>
       {% for prop, values in rows.items %}
-      <tr class="even">
+      <tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
         <td class="property">
           <a class="uri" href="{{prop}}" title="{{prop}}">{{prop}}</a>
         </td>
