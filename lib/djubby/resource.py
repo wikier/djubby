@@ -82,7 +82,7 @@ class Resource:
             data["label"] = self.uri
         datasetBase = conf.get_value("datasetBase")
         webBase = conf.get_value("webBase")
-        data["data"]  = self.uri.replace(datasetBase, "%s%s" % (webBase, "data"))
+        data["data"]  = self.uri.replace(datasetBase, "%s%s/" % (webBase, "data"))
         data["project"] = conf.get_value("projectName")
         data["homelink"] = conf.get_value("projectHomepage")
         data["endpoint"] = conf.get_value("sparqlEndpoint")
