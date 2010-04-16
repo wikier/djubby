@@ -32,6 +32,15 @@ class URI:
     def __str__(self):
         return self.uri
 
+    def __cmp__(self, o):
+        return cmp(self.uri, o.uri)
+
+    def __eq__(self, o):
+        return self.uri.__eq__(o.uri)
+
+    def __hash__(self):
+        return self.uri.__hash__()
+
 def get_values(graph, subject=None, predicate=None):
     return graph.objects(subject=str2uri(subject), predicate=predicate)
 
