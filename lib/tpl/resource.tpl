@@ -95,7 +95,7 @@
               {% if value.literal %}
               <span class="literal">
                 {% if value.language %}
-                <span xml:lang="{{value.languaje}}">{{value.literal}}</span> <small>({{value.language}})</small>
+                <span xml:lang="{{value.language}}">{{value.literal}}</span> <small>({{value.language}})</small>
                 {% else %}
                 {{value.literal}}
                 {% endif %}
