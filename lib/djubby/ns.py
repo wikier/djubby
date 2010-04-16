@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# This file is part of Djubby.
+# This file is part of djubby <http://djubby.googlecode.com/>,
+# a Linked Data frontend for SPARQL endpoints for the Django Web framework
+#
+# Copyright (C) 2010 Sergio Fernández
 #
 # Djubby is free software: you can redistribute it and/or modify it 
 # under the terms of the GNU Lesser General Public License as published
