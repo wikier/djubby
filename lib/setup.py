@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# This file is part of Djubby.
+# This file is part of djubby <http://djubby.googlecode.com/>,
+# a Linked Data frontend for SPARQL endpoints for the Django Web framework
+#
+# Copyright (C) 2010 Sergio Fernández
 #
 # Djubby is free software: you can redistribute it and/or modify it 
 # under the terms of the GNU Lesser General Public License as published
@@ -22,8 +25,8 @@ from setuptools import setup, find_packages
  
 setup(
       name             = "djubby",
-      version          =  "0.1.4",
-      description      = "A Pubby clone for Django, a Linked Data frontend for SPARQL endpoints",
+      version          =  "0.1.5",
+      description      = "A Linked Data frontend for SPARQL endpoints for Django",
       license          = "GNU Library or Lesser General Public License (LGPL) v3",
       author           = "Sergio Fernández",
       author_email     = "sergio@wikier.org",
