@@ -28,7 +28,7 @@ import ns
 class Configuration:
     """Configuration using the Borg design pattern"""
 
-    __shared_state = { "data" : None, "path" : None }
+    __shared_state = { "data" : None, "path" : None, "graph" : None, "endpoint" : None}
 
     def __init__(self, path=None):
         self.__dict__ = self.__shared_state
@@ -36,11 +36,26 @@ class Configuration:
             if (path == None):
                 raise ValueError("djubby's configuration MUST be initialized a first time, read http://code.google.com/p/djubby/wiki/GettingStarted")
             else:
-                logging.debug("reading djubby's configuration from %s" % os.path.abspath(path))
+                self.path = os.path.abspath(path)
+                logging.debug("Reading djubby's configuration from %s..." % self.path)
+                if (not os.path.exists(self.path)):
+                    raise ValueError("Not found a proper file at '%s' with a configuration for djubby. Please, provide a right path" % self.path)
+
                 data = ConjunctiveGraph()
-                data.load(path, format='n3')
-                data.bind("conf", ns.config)  
+                data.bind("conf", ns.config) 
+                try:
+                    data.load(path, format='n3') 
+                except Exception, e:
+                    raise ValueError("Not found a proper N3 file at '%s' with a configuration for djubby. Please, provide a valid N3 file" % self.path)
+
                 self.data = data
+                try:
+                    self.graph = self.get_value("sparqlDefaultGraph")
+                    self.endpoint = self.get_value("sparqlEndpoint")
+                except Exception, e:
+                    raise ValueError("Not found the graph not the endpoint that it's supposed djubby have to query. Please, provide a right donfiguration")
+
+                logging.info("Using <%s> as default graph to query the endpoint <%s>" % (self.graph, self.endpoint))
                 self.__class__.__dict__['_Configuration__shared_state']["data"] = data #FIXME
 
     def get_values(self, prop):

@@ -36,27 +36,15 @@ class Resource:
               }
 
     def __init__(self, uri):
-        logging.debug("trying to build resource with URI <%s>..." % uri)
+        logging.debug("Trying to build resource with URI <%s>..." % uri)
         self.uri = uri
         self.conf = Configuration()
-        self.graph = self.conf.get_value("sparqlDefaultGraph")
-        self.endpoint = self.conf.get_value("sparqlEndpoint")
-        sparql = SPARQLWrapper(self.endpoint)
-        query = self.queries["ask"] % (self.graph, self.uri)
-        sparql.setQuery(query)
-        sparql.setReturnFormat(JSON)
-        results = sparql.query().convert()
-        if (results.has_key("boolean")):
-            # expected answer according SPARQL Protocol
-            if (not results["boolean"]):
-                raise ValueError("URI not found on this dataset")
-        elif (results.has_key("results") and results["results"].has_key("bindings") and len(results["results"]["bindings"])>0):
-            # I don't know why, but virtuoso sometimes uses __ask_retval
-            # http://docs.openlinksw.com/virtuoso/rdfsparql.html
-            if (not bool(results["results"]["bindings"][0]["__ask_retval"]["value"])):
-                raise ValueError("URI not found on this dataset")
+        self.graph = self.conf.graph
+        self.endpoint = self.conf.endpoint
+        if (not self.__ask__()):
+            raise ValueError("Resource wirh URI <%s> not found on this dataset" % self.uri)
         else:
-            raise ValueError("URI not found on this dataset")
+            logging.info("Successfully found the resource with URI <%s> on this dataset" % self.uri)
 
     def get_triples(self):
         sparql = SPARQLWrapper(self.endpoint)
@@ -96,6 +84,25 @@ class Resource:
 
         ctx = Context(data)
         return tpl.render(ctx)
+
+    def __ask__(self):
+        sparql = SPARQLWrapper(self.endpoint)
+        query = self.queries["ask"] % (self.graph, self.uri)
+        sparql.setQuery(query)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if (results.has_key("boolean")):
+            # expected answer according SPARQL Protocol
+            if (not results["boolean"]):
+                return False
+        elif (results.has_key("results") and results["results"].has_key("bindings") and len(results["results"]["bindings"])>0):
+            # I don't know why, but virtuoso sometimes uses __ask_retval
+            # http://docs.openlinksw.com/virtuoso/rdfsparql.html
+            if (not bool(results["results"]["bindings"][0]["__ask_retval"]["value"])):
+                return False
+        else:
+            return False
+        return True
 
     def __get_rows__(self, g):
         rows = {}
