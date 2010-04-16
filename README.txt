@@ -17,15 +17,22 @@ Authors:
 
 Features:
 --------
-    * Provides a Linked Data interface to local or remote SPARQL protocol servers
-    * Provides dereferenceable URIs by rewriting URIs found in the SPARQL-exposed 
-      dataset into the djubby server's namespace
-    * Provides a simple HTML interface showing the data available about each resource
-    * Takes care of handling 303 redirects and content negotiation
-    * Compatible with the Django Web framework
+    * Provides a Linked Data interface to local or remote SPARQL protocol servers.
+    * Provides dereferenceable URIs by rewriting URIs found in the SPARQL-exposed
+      dataset into the djubby server's namespace.
+    * Provides a simple HTML interface showing the data available about each resource.
+    * Takes care of handling 303 redirects and content negotiation.
+    * Compatible with the Django Web framework.
 
 Planned:
-    * Includes a metadata extension to add metadata to the provided data
+    * Include a metadata extension to add metadata to the provided data.
+
+
+Limitations:
+-----------
+    * Only works for SPARQL endpoint that can answer ASK and DESCRIBE queries.
+    * Multiple dataset support may not work as expected, so it is recommended to 
+      simply set up a separate djubby instance for each dataset.
 
 
 Dependencies:
@@ -46,5 +53,4 @@ Install:
 -------
     cd lib/
     sudo python setup.py install
-
 
