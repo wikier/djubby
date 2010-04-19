@@ -4,6 +4,7 @@
   <head>
     <title>{{label}} | {{project}}</title>
     <link rel="alternate" type="application/rdf+xml" href="{{data}}" title="RDF" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style type="text/css">
 		html { margin: 0; padding: 0; }
 		body { font-family: sans-serif; font-size: 80%; margin: 0; padding: 1.2em 2em; }
