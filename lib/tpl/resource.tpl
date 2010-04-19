@@ -59,7 +59,8 @@
 		}
     </style>
   </head>
-  <body onLoad="init();">
+
+  <body>
 
     <div id="header">
       <div>
