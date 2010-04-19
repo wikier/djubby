@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{lang}}" lang="{{lang}}">
   <head>
     <title>{{label}} | {{project}}</title>
     <link rel="alternate" type="application/rdf+xml" href="{{data}}" title="RDF" />
