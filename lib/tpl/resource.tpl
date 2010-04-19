@@ -81,7 +81,7 @@
 
     <table class="description">
       <tr>
-        <th width="25%">Property</th>
+        <th style="width: 25%">Property</th>
         <th>Value/s</th>
       </tr>
       {% for prop, values in rows.items %}
