@@ -22,7 +22,7 @@ import logging
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from configuration import Configuration
 from resource import Resource
-from http import Http303, get_preferred_prefix, get_mimetype, url_handler
+from http import Http303, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler
 from urllib2 import URLError
 
 def dispatcher(request, ref=None):
@@ -48,9 +48,10 @@ def dispatcher(request, ref=None):
             prefix = get_preferred_prefix(request)
             logging.debug("Redirecting to the %s representation of %s" % (prefix, uri))
             return Http303("%s/%s" % (prefix, ref))
-        else:
-            logging.debug("Returning the %s representation of %s" % (prefix, uri))
-            func = getattr(resource, "get_%s" % prefix)
-            mimetype = get_mimetype(prefix)
+        else:         
+            output = get_preferred_output(request, prefix)
+            func = getattr(resource, "get_%s_%s" % (prefix, output))
+            mimetype = get_mimetype(prefix, output)            
+            logging.debug("Returning the %s representation of %s serialized as %s" % (prefix, uri, output))       
             return HttpResponse(func(), mimetype=mimetype)
 

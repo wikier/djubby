@@ -22,10 +22,11 @@ from configuration import Configuration
 import mimeparse
 from sets import Set
 from django.http import HttpResponseRedirect
+from django.utils.datastructures import MultiValueDictKeyError
 
 formats = {
-            "data" : [ "application/rdf+xml" ],
-            "page" : [ "text/html", "application/xhtml+xml" ]
+            "data" : { "default":"application/rdf+xml", "xml":"application/rdf+xml", "n3":"text/n3" },
+            "page" : { "default":"text/html", "html":"text/html", "xhtml":"application/xhtml+xml" }
 
           }
 
@@ -33,15 +34,26 @@ def get_supported_prefixes():
     return formats.keys()
 
 def get_supported_formats():
-    f = Set()
-    for l in formats.itervalues():
-        f = f.union(Set(l))
+    formats = Set()
+    for f in formats.itervalues():
+        for m in f.itervalues():
+            formats.add(m)
     return list(f)
 
-def get_mimetype(prefix):
+def get_supported_outputs():
+    outputs = Set()
+    for f in formats.itervalues():
+        for o in f.iterkeys():
+            if (not o == "default"):
+                outputs.add(o)
+    return list(outputs)
+
+def get_mimetype(prefix, output):
     if (not prefix in formats):
         prefix = "data"
-    return formats[prefix][0]
+    if (not output in formats[prefix]):
+        output = "default"
+    return formats[prefix][output]
 
 def get_prefix(mimetype):
     for prefix, mimes in formats.items():
@@ -58,6 +70,19 @@ def get_preferred_format(request):
 
 def get_preferred_prefix(request):
     return get_prefix(get_preferred_format(request))
+
+def get_preferred_output(request, prefix):
+    if (prefix == "page"):
+        return "html"
+    else:
+        try:
+            output = request.GET["output"]
+            if (output in get_supported_outputs()):
+                return output
+            else:
+                return "xml"
+        except MultiValueDictKeyError:
+            return "xml"
 
 def url_handler(ref):
     uri = None

@@ -55,10 +55,20 @@ class Resource:
         return g
 
     def get_data(self):
+        return get_data_xml()
+
+    def get_data_xml(self):
         g = self.get_triples()
         return g.serialize(format="pretty-xml")
 
+    def get_data_n3(self):
+        g = self.get_triples()
+        return g.serialize(format="n3")
+
     def get_page(self):
+        return get_page_html()
+
+    def get_page_html(self):
         g = self.get_triples()
         tpl = Template(self.__read_template__())
 
