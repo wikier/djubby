@@ -1,6 +1,9 @@
 djubby's changelog:
 ------------------
 
+0.1.5 (20/04/2010):
+  * Added N3 support
+
 0.1.4 (16/04/2010):
   * Improved HTML renderization
 
