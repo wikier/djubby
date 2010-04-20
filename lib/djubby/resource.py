@@ -52,6 +52,8 @@ class Resource:
         g = sparql.query().convert()
         logging.debug("Returning %d triples describing resource <%s>" % (len(g), self.uri))
         #FIXME: enrich with metadata
+        for prefix, namespace in self.conf.data.namespaces():
+            g.bind(prefix, namespace) 
         return g
 
     def get_data(self):
