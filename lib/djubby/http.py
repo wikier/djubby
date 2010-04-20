@@ -56,7 +56,8 @@ def get_mimetype(prefix, output):
     return formats[prefix][output]
 
 def get_prefix(mimetype):
-    for prefix, mimes in formats.items():
+    for prefix, f in formats.items():
+        mimes = f.values()
         if mimetype in mimes:
             return prefix
     return "data"
