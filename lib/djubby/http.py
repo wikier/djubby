@@ -34,11 +34,11 @@ def get_supported_prefixes():
     return formats.keys()
 
 def get_supported_formats():
-    formats = Set()
+    fs = Set()
     for f in formats.itervalues():
         for m in f.itervalues():
-            formats.add(m)
-    return list(f)
+            fs.add(m)
+    return list(fs)
 
 def get_supported_outputs():
     outputs = Set()
