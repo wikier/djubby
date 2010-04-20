@@ -27,8 +27,8 @@ from urllib2 import URLError
 
 def dispatcher(request, ref=None):
     logging.debug("Dispatching request on '%s'..." % ref)
+    conf = Configuration()
     if (ref == None or len(ref) == 0):
-        conf = Configuration()
         index = conf.get_value("indexResource")
         index = index.replace(conf.get_value("datasetBase"), conf.get_value("webBase"))
         logging.debug("Redirecting to the index resource...")
@@ -46,8 +46,9 @@ def dispatcher(request, ref=None):
 
         if (prefix == None):
             prefix = get_preferred_prefix(request)
-            logging.debug("Redirecting to the %s representation of %s" % (prefix, uri))
-            return Http303("%s/%s" % (prefix, ref))
+            newuri = conf.get_value("webBase") + ref.replace(conf.get_value("webResourcePrefix"), prefix+"/")
+            logging.debug("Redirecting to the %s representation of %s: %s" % (prefix, uri, newuri))
+            return Http303(newuri)
         else:         
             output = get_preferred_output(request, prefix)
             func = getattr(resource, "get_%s_%s" % (prefix, output))

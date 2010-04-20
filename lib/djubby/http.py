@@ -96,15 +96,20 @@ def url_handler(ref):
     conf = Configuration()
     datasetBase = conf.get_value("datasetBase")
     webBase = conf.get_value("webBase")
+    resourcePrefix = conf.get_value("webResourcePrefix")
 
-    splitted = ref.split("/")
-    if (splitted[0] in get_supported_prefixes()):
-        prefix = splitted[0]
-        uri = datasetBase + "/".join(splitted[1:])
-    else:
+    if (ref.startswith(resourcePrefix)):
         prefix = None
         uri = datasetBase + ref
-    return uri, prefix
+        return uri, prefix
+    else:
+        splitted = ref.split("/")
+        prefix = splitted[0]
+        if (prefix in get_supported_prefixes()):
+            uri = datasetBase + ref.replace(prefix+"/", conf.get_value("webResourcePrefix"))
+            return uri, prefix
+        else:
+            raise ValueError("Unsupportet type '%s'" % splitted[0])
 
 class Http303(HttpResponseRedirect):
     status_code = 303
