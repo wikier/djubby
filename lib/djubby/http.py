@@ -65,7 +65,7 @@ def get_preferred_format(request):
     try:
         accept = request.META["HTTP_ACCEPT"]
     except KeyError:
-        accept = formats["data"]
+        accept = formats["data"]["xml"]
     return mimeparse.best_match(get_supported_formats(), accept)
 
 def get_preferred_prefix(request):
@@ -82,6 +82,11 @@ def get_preferred_output(request, prefix):
             else:
                 return "xml"
         except MultiValueDictKeyError:
+            format = get_preferred_format(request)
+            for output, mimetype in formats["data"].items():
+                if (output != "default"):
+                    if (mimetype == format):
+                        return output
             return "xml"
 
 def url_handler(ref):
