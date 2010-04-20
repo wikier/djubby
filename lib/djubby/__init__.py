@@ -22,7 +22,7 @@ __version__ = "0.1.5"
 __authors__ = "Sergio Fernández"
 __license__ = "GNU Library or Lesser General Public License (LGPL) v3"
 __contact__ = "sergio@wikier.org"
-__date__    = "2010-04-16"
+__date__    = "2010-04-20"
 __agent__   = "djubby %s (http://djubby.googlecode.com/)" % __version__
 
 # Some common stuff for network:
