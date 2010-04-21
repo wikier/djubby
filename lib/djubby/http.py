@@ -90,6 +90,11 @@ def get_preferred_output(request, prefix):
                         return output
             return "xml"
 
+def get_document_url(uri, prefix, conf=None):
+    if (conf == None):
+        conf = Configuration()
+    return uri.replace(conf.get_value("datasetBase"), conf.get_value("webBase")).replace(conf.get_value("webResourcePrefix"), "%s/" % prefix)
+
 def url_handler(ref):
     uri = None
     prefix = None

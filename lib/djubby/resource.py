@@ -27,6 +27,7 @@ import rdf
 import ns
 from rdflib import URIRef
 from rdflib import Literal
+from http import get_document_url
 
 class Resource:
 
@@ -55,6 +56,15 @@ class Resource:
         for prefix, namespace in self.conf.data.namespaces():
             g.bind(prefix, namespace) 
         return g
+
+    def get_uri(self):
+        return uri
+
+    def get_data_url(self):
+        return get_document_url(self.uri, "data")
+
+    def get_page_url(self):
+        return get_document_url(self.uri, "page")
 
     def get_data(self):
         return get_data_xml()
@@ -85,7 +95,7 @@ class Resource:
             data["label"] = self.uri
         datasetBase = self.conf.get_value("datasetBase")
         webBase = self.conf.get_value("webBase")
-        data["data"]  = self.uri.replace(datasetBase, "%s%s/" % (webBase, "data"))
+        data["data"]  = self.get_data_url()
         data["project"] = self.conf.get_value("projectName")
         data["homelink"] = self.conf.get_value("projectHomepage")
         data["endpoint"] = self.conf.get_value("sparqlEndpoint")

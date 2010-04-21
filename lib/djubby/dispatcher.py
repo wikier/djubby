@@ -46,9 +46,10 @@ def dispatcher(request, ref=None):
 
         if (prefix == None):
             prefix = get_preferred_prefix(request)
-            newuri = conf.get_value("webBase") + ref.replace(conf.get_value("webResourcePrefix"), prefix+"/")
-            logging.debug("Redirecting to the %s representation of %s: %s" % (prefix, uri, newuri))
-            return Http303(newuri)
+            get_url = getattr(resource, "get_%s_url" % prefix)
+            url = get_url()
+            logging.debug("Redirecting to the %s representation of %s: %s" % (prefix, uri, url))
+            return Http303(url)
         else:         
             output = get_preferred_output(request, prefix)
             func = getattr(resource, "get_%s_%s" % (prefix, output))
