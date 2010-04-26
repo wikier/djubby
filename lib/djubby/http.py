@@ -93,7 +93,13 @@ def get_preferred_output(request, prefix):
 def get_document_url(uri, prefix, conf=None):
     if (conf == None):
         conf = Configuration()
-    return uri.replace(conf.get_value("datasetBase"), conf.get_value("webBase")).replace(conf.get_value("webResourcePrefix"), "%s/" % prefix)
+    webResourcePrefix = conf.get_value("webResourcePrefix")
+    datasetBase = conf.get_value("datasetBase")
+    webBase = conf.get_value("webBase")
+    if (len(webResourcePrefix) == 0):
+        return "%s%s/%s" % (webBase, prefix, uri[len(datasetBase):])
+    else:
+        return uri.replace(datasetBase, webBase).replace(webResourcePrefix, "%s/" % prefix)
 
 def url_handler(ref):
     uri = None
@@ -101,20 +107,31 @@ def url_handler(ref):
     conf = Configuration()
     datasetBase = conf.get_value("datasetBase")
     webBase = conf.get_value("webBase")
-    resourcePrefix = conf.get_value("webResourcePrefix")
+    webResourcePrefix = conf.get_value("webResourcePrefix")
 
-    if (ref.startswith(resourcePrefix)):
-        prefix = None
-        uri = datasetBase + ref
-        return uri, prefix
-    else:
+    if (len(webResourcePrefix) == 0):
         splitted = ref.split("/")
         prefix = splitted[0]
         if (prefix in get_supported_prefixes()):
-            uri = datasetBase + ref.replace(prefix+"/", conf.get_value("webResourcePrefix"))
+            uri = "%s%s" % (datasetBase, ref[len(prefix)+1:])
             return uri, prefix
         else:
-            raise ValueError("Unsupportet type '%s'" % splitted[0])
+            prefix = None
+            uri = datasetBase + ref
+            return uri, prefix        
+    else:
+        if (ref.startswith(webResourcePrefix)):
+            prefix = None
+            uri = datasetBase + ref
+            return uri, prefix
+        else:
+            splitted = ref.split("/")
+            prefix = splitted[0]
+            if (prefix in get_supported_prefixes()):
+                uri = datasetBase + ref.replace(prefix+"/", conf.get_value("webResourcePrefix"))
+                return uri, prefix
+            else:
+                raise ValueError("Unsupportet type '%s'" % splitted[0])
 
 class Http303(HttpResponseRedirect):
     status_code = 303
