@@ -70,7 +70,7 @@
         <h1 id="title">{{label}}</h1>
         <div id="homelink">at <a href="{{homelink}}">{{project}}</a></div>
       </div>
-      <div class="page-resource-uri"><a href="{{uri}}">{{uri}}</a></div>
+      <div class="page-resource-uri"><a href="{{uri.url}}">{{uri}}</a></div>
       <div id="rdficon"><a href="{{data}}" title="RDF data"><img src="http://www.w3.org/RDF/icons/rdf_flyer.24" alt="[This page as RDF]" /></a></div>
 
     </div>
@@ -94,7 +94,7 @@
             {% for value in values%}
             <li>
               {% if value.uri %}
-              <a class="uri" href="{{value.uri}}" title="{{value.uri}}">{{value.label}}</a>
+              <a class="uri" href="{{value.url}}" title="{{value.uri}}">{{value.label}}</a>
               {% else %}
               {% if value.literal %}
               <span class="literal">

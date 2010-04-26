@@ -20,26 +20,12 @@
 
 from rdflib import URIRef
 
-class URI:
-
-    def __init__(self, uri, label=None):
-        if (type(uri)==URIRef):
-            self.uri = unicode(uri)
-        else:
-            self.uri = uri
-        self.label = label
-
-    def __str__(self):
-        return self.uri
-
-    def __cmp__(self, o):
-        return cmp(self.uri, o.uri)
-
-    def __eq__(self, o):
-        return self.uri.__eq__(o.uri)
-
-    def __hash__(self):
-        return self.uri.__hash__()
+#FIXME: duplicate function because circular import
+def str2uri(uri):
+    if (type(uri)==str or type(uri)==unicode):
+        return URIRef(uri)
+    else:
+        return uri
 
 def get_values(graph, subject=None, predicate=None):
     return graph.objects(subject=str2uri(subject), predicate=predicate)
@@ -59,25 +45,4 @@ def get_value(graph, subject=None, predicate=None, lang=None):
 
 def get_predicates(graph, subject=None):
     return graph.predicate_objects(str2uri(subject))
-
-def str2uri(uri):
-    if (type(uri)==str or type(uri)==unicode):
-        return URIRef(uri)
-    else:
-        return uri
-
-def uri2curie(uri, namespaces):
-    url, fragment = splitUri(uri)
-    for prefix, ns in namespaces: #improve the performace of this operation       
-        if (unicode(ns) == url):
-            return "%s:%s" % (prefix, fragment)
-    return uri
-
-def splitUri(uri):
-    if ("#" in uri):
-        splitted = uri.split("#")
-        return ("%s#"%splitted[0], splitted[1])
-    else:
-        splitted = uri.split("/")
-        return ("/".join(splitted[:-1])+"/", splitted[-1])
 

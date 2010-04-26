@@ -25,6 +25,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from django.template import Template, Context
 import rdf
 import ns
+from uri import URI, uri2curie
 from rdflib import URIRef
 from rdflib import Literal
 from http import get_document_url
@@ -85,7 +86,7 @@ class Resource:
         tpl = Template(self.__read_template__())
 
         data = {}
-        data["uri"] = self.uri
+        data["uri"] = URI(self.uri)
         lang = self.conf.get_value("defaultLanguage")
         data["lang"] = lang
         label = rdf.get_value(g, self.uri, ns.rdfs["label"], lang)
@@ -130,18 +131,18 @@ class Resource:
     def __get_rows__(self, g):
         rows = {}
         for p, o in rdf.get_predicates(g, self.uri):
-            prop = rdf.URI(unicode(p), rdf.uri2curie(unicode(p), self.conf.data.namespaces()))
+            prop = URI(p)
             if (not rows.has_key(prop)):
                 rows[prop] = []
             if (type(o) == URIRef):
-                rows[prop].append(rdf.URI(unicode(o), rdf.uri2curie(unicode(o), self.conf.data.namespaces())))
+                rows[prop].append(URI(o))
             elif (type(o) == Literal):
                 item = {}
                 item["literal"] = unicode(o)
                 if (o.language):
                     item["language"] = o.language
                 if (o.datatype):
-                    item["datatype"] = rdf.uri2curie(o.datatype, self.conf.data.namespaces())
+                    item["datatype"] = uri2curie(o.datatype, self.conf.data.namespaces())
                 rows[prop].append(item)
             else:
                 rows[prop].append(o)
