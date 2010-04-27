@@ -44,7 +44,7 @@ class Resource:
         self.graph = self.conf.graph
         self.endpoint = self.conf.endpoint
         if (not self.__ask__()):
-            raise ValueError("Resource wirh URI <%s> not found on this dataset" % self.uri)
+            raise ValueError("Resource with URI <%s> not found on this dataset" % self.uri)
         else:
             logging.info("Successfully found the resource with URI <%s> on this dataset" % self.uri)
 
