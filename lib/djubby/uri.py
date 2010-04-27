@@ -20,6 +20,7 @@
 
 from configuration import Configuration
 from rdflib import URIRef
+from urllib import unquote
 
 class URI:
 
@@ -49,6 +50,11 @@ def str2uri(uri):
         return URIRef(uri)
     else:
         return uri
+
+def uri2str(uri):
+    if (type(uri)==URIRef(uri)):
+        uri = unicode(uri)
+    return unquote(uri)
 
 def uri2curie(uri, namespaces):
     url, fragment = splitUri(uri)

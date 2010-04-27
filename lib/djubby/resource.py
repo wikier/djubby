@@ -25,7 +25,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from django.template import Template, Context
 import rdf
 import ns
-from uri import URI, uri2curie
+from uri import URI, uri2curie, uri2str
 from rdflib import URIRef
 from rdflib import Literal
 from http import get_document_url
@@ -39,7 +39,7 @@ class Resource:
 
     def __init__(self, uri):
         logging.debug("Trying to build resource with URI <%s>..." % uri)
-        self.uri = uri
+        self.uri = uri2str(uri)
         self.conf = Configuration()
         self.graph = self.conf.graph
         self.endpoint = self.conf.endpoint
