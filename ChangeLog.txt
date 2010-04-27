@@ -4,6 +4,7 @@ djubby's changelog:
 0.1.7 (27/04/2010):
   * Fixed issue with empty values for conf:webResourcePrefix
   * Refactorized URI module
+  * Added support to conf:fixUnescapedCharacters
 
 0.1.6 (21/04/2010):
   * Fixed issue getting documents' URL with the new URIs scheme
