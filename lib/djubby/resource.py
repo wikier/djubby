@@ -25,7 +25,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from django.template import Template, Context
 import rdf
 import ns
-from uri import URI, uri2curie, uri2str
+from uri import URI, uri2curie, uri2str, quote
 from rdflib import URIRef
 from rdflib import Literal
 from http import get_document_url
@@ -43,10 +43,17 @@ class Resource:
         self.conf = Configuration()
         self.graph = self.conf.graph
         self.endpoint = self.conf.endpoint
-        if (not self.__ask__()):
-            raise ValueError("Resource with URI <%s> not found on this dataset" % self.uri)
-        else:
+        if (self.__ask__()):
             logging.info("Successfully found the resource with URI <%s> on this dataset" % self.uri)
+        else:
+            #FIXME: patch to support incosistencies on the URIs
+            cleanuri = self.uri
+            self.uri = quote(self.uri)
+            logging.debug("Not found on the first try, trying the encoded URI  <%s>..." % self.uri)
+            if (self.__ask__()):
+                logging.info("Successfully found the resource with URI <%s> on this dataset" % self.uri)
+            else:
+                raise ValueError("Resource with URI <%s> not found on this dataset" % self.uri)            
 
     def get_triples(self):
         sparql = SPARQLWrapper(self.endpoint)
