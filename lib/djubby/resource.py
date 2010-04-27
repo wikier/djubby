@@ -117,16 +117,16 @@ class Resource:
         results = sparql.query().convert()
         if (results.has_key("boolean")):
             # expected answer according SPARQL Protocol
-            if (not results["boolean"]):
-                return False
+            if (results["boolean"]):
+                return True
         elif (results.has_key("results") and results["results"].has_key("bindings") and len(results["results"]["bindings"])>0):
             # I don't know why, but virtuoso sometimes uses __ask_retval
             # http://docs.openlinksw.com/virtuoso/rdfsparql.html
-            if (not bool(results["results"]["bindings"][0]["__ask_retval"]["value"])):
-                return False
+            if (bool(results["results"]["bindings"][0]["__ask_retval"]["value"])):
+                return True
         else:
             return False
-        return True
+        return False
 
     def __get_rows__(self, g):
         rows = {}
