@@ -25,7 +25,7 @@ from setuptools import setup, find_packages
  
 setup(
       name             = "djubby",
-      version          =  "0.1.7",
+      version          =  "0.1.8",
       description      = "A Linked Data frontend for SPARQL endpoints for Django",
       license          = "GNU Library or Lesser General Public License (LGPL) v3",
       author           = "Sergio Fernández",

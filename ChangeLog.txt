@@ -1,6 +1,9 @@
 djubby's changelog:
 ------------------
 
+0.1.8 (28/04/2010):
+  * Fixed problem distributing templates on the tarball (issue #1)
+
 0.1.7 (27/04/2010):
   * Fixed issue with empty values for conf:webResourcePrefix
   * Refactorized URI module
