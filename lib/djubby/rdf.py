@@ -19,6 +19,8 @@
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
 from rdflib import URIRef
+from rdflib import ConjunctiveGraph
+from cStringIO import StringIO
 
 #FIXME: duplicate function because circular import
 def str2uri(uri):
@@ -45,4 +47,12 @@ def get_value(graph, subject=None, predicate=None, lang=None):
 
 def get_predicates(graph, subject=None):
     return graph.predicate_objects(str2uri(subject))
+
+def translate(src, uri, fin="xml", fout="nt"):
+    g = ConjunctiveGraph()
+    g.load(StringIO(src), uri, fin)
+    return g.serialize(None, fout, uri)    
+
+def rdf2triplepatterns(src, uri, format="xml"):
+    return translate(src, uri, format, "nt")
 
