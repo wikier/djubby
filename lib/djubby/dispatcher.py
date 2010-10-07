@@ -35,7 +35,7 @@ def dispatcher(request, ref=None):
     except NameError, ne:
         msg = "dispatcher not found for %s requests" % method
         logging.error(msg)
-        return Http501(msg, ne)
+        raise Http501(msg, ne)
 
 def dispatcher_gets(request, ref, conf):
     if (ref == None or len(ref) == 0):
@@ -66,4 +66,11 @@ def dispatcher_gets(request, ref, conf):
             mimetype = get_mimetype(prefix, output)            
             logging.debug("Returning the %s representation of %s serialized as %s" % (prefix, uri, output))       
             return HttpResponse(func(), mimetype=mimetype)
+
+def dispatcher_posts(request, ref, conf):
+    graph = ""
+    if (ref == None or len(ref) == 0):
+        logging.debug("no explicit graph, using default one")
+        graph = conf.get_value("sparqlDefaultGraph")
+    raise Http501("not yet implemented")
 
