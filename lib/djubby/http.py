@@ -101,10 +101,9 @@ def get_document_url(uri, prefix, conf=None):
     else:
         return uri.replace(datasetBase, webBase).replace(webResourcePrefix, "%s/" % prefix)
 
-def url_handler(ref):
+def url_handler(ref, conf):
     uri = None
     prefix = None
-    conf = Configuration()
     datasetBase = conf.get_value("datasetBase")
     webBase = conf.get_value("webBase")
     webResourcePrefix = conf.get_value("webResourcePrefix")
@@ -135,4 +134,7 @@ def url_handler(ref):
 
 class Http303(HttpResponseRedirect):
     status_code = 303
+
+class Http501(HttpResponseRedirect):
+    status_code = 501
 

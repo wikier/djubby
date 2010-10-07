@@ -22,12 +22,22 @@ import logging
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from configuration import Configuration
 from resource import Resource
-from http import Http303, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler
+from http import Http303, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler
 from urllib2 import URLError
 
 def dispatcher(request, ref=None):
-    logging.debug("Dispatching request on '%s'..." % ref)
     conf = Configuration()
+    method = request.method
+    logging.debug("Dispatching %s request on '%s'..." % (method, ref))
+    try:
+        dispatch = eval("dispatcher_%ss" % method.lower())
+        return dispatch(request, ref, conf)
+    except NameError, ne:
+        msg = "dispatcher not found for %s requests" % method
+        logging.error(msg)
+        return Http501(msg, ne)
+
+def dispatcher_gets(request, ref, conf):
     if (ref == None or len(ref) == 0):
         index = conf.get_value("indexResource")
         index = index.replace(conf.get_value("datasetBase"), conf.get_value("webBase"))
@@ -35,7 +45,7 @@ def dispatcher(request, ref=None):
         return HttpResponseRedirect(index)
     else:
         try:
-            uri, prefix = url_handler(ref)
+            uri, prefix = url_handler(ref, conf)
             resource = Resource(uri)
         except ValueError, ve:
             logging.error("Error processing request for '%s': %s" % (ref, str(ve)))
