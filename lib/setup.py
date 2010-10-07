@@ -25,8 +25,8 @@ from setuptools import setup, find_packages
  
 setup(
       name             = "djubby",
-      version          =  "0.1.8",
-      description      = "A Linked Data frontend for SPARQL endpoints for Django",
+      version          =  "0.2.0",
+      description      = "A Read-Write Linked Data frontend for SPARQL endpoints for Django",
       license          = "GNU Library or Lesser General Public License (LGPL) v3",
       author           = "Sergio Fernández",
       author_email     = "sergio@wikier.org",
@@ -35,7 +35,7 @@ setup(
       platforms        = ["any"],
       packages         = ["djubby"],
       requires         = ["rdflib", "SPARQLWrapper", "django", "mimeparse"], 
-      install_requires = ["rdflib >= 2.4.0", "SPARQLWrapper >= 1.3.2", "django >= 1.1.0", "mimeparse >= 0.1.2"],
+      install_requires = ["rdflib >= 2.4.0", "SPARQLWrapper >= 1.3.2", "django >= 1.1.0", "mimeparse >= 0.1.3"],
       classifiers      = [
                             "Development Status :: 4 - Beta ",
                             "Intended Audience :: Developers",
