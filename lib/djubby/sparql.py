@@ -48,3 +48,4 @@ def describe(endpoint, graph, uri):
     sparql = SPARQLWrapper(endpoint)
     sparql.setQuery(queries["describe"] % (uri, graph))
     g = sparql.query().convert()
+    return g
