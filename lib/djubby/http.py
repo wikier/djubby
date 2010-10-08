@@ -39,9 +39,10 @@ def get_supported_prefixes():
 
 def get_supported_formats():
     fs = Set()
-    for f in formats.itervalues():
-        for m in f.itervalues():
-            fs.add(m)
+    for f,v in formats.items():
+        if (f != "mime"):
+            for m in v.itervalues():
+                fs.add(m)
     return list(fs)
 
 def get_supported_outputs():
