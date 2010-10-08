@@ -25,7 +25,7 @@ queries = {
             "describe" : "DESCRIBE <%s> FROM <%s>"
           }
 
-def ask(enpoint, graph, uri):
+def ask(endpoint, graph, uri):
     sparql = SPARQLWrapper(endpoint)
     query = queries["ask"] % (graph, uri)
     sparql.setQuery(query)
