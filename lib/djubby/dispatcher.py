@@ -19,10 +19,10 @@
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, Http404
 from configuration import Configuration
 from resource import Resource
-from http import Http303, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler
+from http import Http303, Http307, Http405, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler
 from urllib2 import URLError
 
 def dispatcher(request, ref=None):
@@ -32,27 +32,27 @@ def dispatcher(request, ref=None):
     try:
         dispatch = eval("dispatcher_%ss" % method.lower())
         return dispatch(request, ref, conf)
-    except NameError, ne:
+    except NameError:
         msg = "dispatcher not found for %s requests" % method
         logging.error(msg)
-        return Http501(msg, ne)
+        raise Http405(msg)
 
 def dispatcher_gets(request, ref, conf):
     if (ref == None or len(ref) == 0):
         index = conf.get_value("indexResource")
         index = index.replace(conf.get_value("datasetBase"), conf.get_value("webBase"))
         logging.debug("Redirecting to the index resource...")
-        return HttpResponseRedirect(index)
+        return Http307(index)
     else:
         try:
             uri, prefix = url_handler(ref, conf)
             resource = Resource(uri)
         except ValueError, ve:
             logging.error("Error processing request for '%s': %s" % (ref, str(ve)))
-            return Http404(ve)
+            raise Http404(ve)
         except URLError, ue:
             logging.error("Error retrieving data for '%s': %s" % (ref, str(ue)))
-            return Http404(ue)
+            raise Http404(ue)
 
         if (prefix == None):
             prefix = get_preferred_prefix(request)
@@ -75,5 +75,5 @@ def dispatcher_posts(request, ref, conf):
     else:
         graph, prefix = url_handler(ref, conf)
         print graph, prefix
-    return Http501("not yet implemented")
+    raise Http501("not yet implemented")
 

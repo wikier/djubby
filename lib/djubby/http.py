@@ -19,6 +19,7 @@
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
 from configuration import Configuration
+from exceptions import Exception
 import mimeparse
 from sets import Set
 from django.http import HttpResponseRedirect
@@ -135,6 +136,12 @@ def url_handler(ref, conf):
 class Http303(HttpResponseRedirect):
     status_code = 303
 
-class Http501(HttpResponseRedirect):
+class Http307(HttpResponseRedirect):
+    status_code = 307
+
+class Http405(Exception):
+    status_code = 405
+
+class Http501(Exception):
     status_code = 501
 
