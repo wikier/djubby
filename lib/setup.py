@@ -35,7 +35,7 @@ setup(
       platforms        = ["any"],
       packages         = ["djubby"],
       requires         = ["rdflib", "SPARQLWrapper", "django", "mimeparse"], 
-      install_requires = ["rdflib >= 2.4.0", "SPARQLWrapper >= 1.3.2", "django >= 1.1.0", "mimeparse >= 0.1.3"],
+      install_requires = ["rdflib >= 2.4.0", "SPARQLWrapper >= 1.3.2", "django >= 1.1.0", "mimeparse == 0.1.2"],
       classifiers      = [
                             "Development Status :: 4 - Beta ",
                             "Intended Audience :: Developers",
