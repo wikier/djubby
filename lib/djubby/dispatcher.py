@@ -35,7 +35,7 @@ def dispatcher(request, ref=None):
     except NameError, ne:
         msg = "dispatcher not found for %s requests" % method
         logging.error(msg)
-        raise Http501(msg, ne)
+        return Http501(msg, ne)
 
 def dispatcher_gets(request, ref, conf):
     if (ref == None or len(ref) == 0):
@@ -49,10 +49,10 @@ def dispatcher_gets(request, ref, conf):
             resource = Resource(uri)
         except ValueError, ve:
             logging.error("Error processing request for '%s': %s" % (ref, str(ve)))
-            raise Http404(ve)
+            return Http404(ve)
         except URLError, ue:
             logging.error("Error retrieving data for '%s': %s" % (ref, str(ue)))
-            raise Http404(ue)
+            return Http404(ue)
 
         if (prefix == None):
             prefix = get_preferred_prefix(request)
@@ -70,7 +70,7 @@ def dispatcher_gets(request, ref, conf):
 def dispatcher_posts(request, ref, conf):
     graph = ""
     if (ref == None or len(ref) == 0):
-        logging.debug("no explicit graph, using default one")
+        logging.debug("no explicit graph, so using the default one")
         graph = conf.get_value("sparqlDefaultGraph")
-    raise Http501("not yet implemented")
+    return Http501("not yet implemented")
 
