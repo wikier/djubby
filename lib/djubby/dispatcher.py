@@ -22,7 +22,7 @@ import logging
 from django.http import HttpResponse, Http404
 from configuration import Configuration
 from resource import Resource
-from http import Http303, Http307, Http405, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler
+from http import Http303, Http307, Http405, Http501, get_preferred_format, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler
 from urllib2 import URLError
 
 def dispatcher(request, ref=None):
@@ -31,11 +31,11 @@ def dispatcher(request, ref=None):
     logging.debug("Dispatching %s request on '%s'..." % (method, ref))
     try:
         dispatch = eval("dispatcher_%ss" % method.lower())
-        return dispatch(request, ref, conf)
-    except NameError:
+    except NameError, ne:
         msg = "dispatcher not found for %s requests" % method
         logging.error(msg)
-        raise Http405(msg)
+        raise Http405(msg, ne)
+    return dispatch(request, ref, conf)
 
 def dispatcher_gets(request, ref, conf):
     if (ref == None or len(ref) == 0):
@@ -45,7 +45,7 @@ def dispatcher_gets(request, ref, conf):
         return Http307(index)
     else:
         try:
-            uri, prefix = url_handler(ref, conf)
+            uri, prefix = url_handler(request, ref, conf)
             resource = Resource(uri)
         except ValueError, ve:
             logging.error("Error processing request for '%s': %s" % (ref, str(ve)))
@@ -68,12 +68,13 @@ def dispatcher_gets(request, ref, conf):
             return HttpResponse(func(), mimetype=mimetype)
 
 def dispatcher_posts(request, ref, conf):
-    graph = ""
+    graph = None
     if (ref == None or len(ref) == 0):
         logging.debug("no explicit graph, so using the default one")
         graph = conf.get_value("sparqlDefaultGraph")
     else:
-        graph, prefix = url_handler(ref, conf)
-        print graph, prefix
-    raise Http501("not yet implemented")
+        graph = url_handler(request, ref, conf)
+        logging.debug("using <%s> graph" % graph)
+    format = get_preferred_format(request)
+    data = 
 

@@ -27,9 +27,12 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 formats = {
             "data" : { "default":"application/rdf+xml", "xml":"application/rdf+xml", "n3":"text/n3" },
-            "page" : { "default":"text/html", "html":"text/html", "xhtml":"application/xhtml+xml" }
-
+            "page" : { "default":"text/html", "html":"text/html", "xhtml":"application/xhtml+xml" },
+            "mime" : { "default":"xml", "application/rdf+xml":"xml" }
           }
+
+GET = "GET"
+POST = "POST"
 
 def get_supported_prefixes():
     return formats.keys()
@@ -64,11 +67,24 @@ def get_prefix(mimetype):
     return "data"
 
 def get_preferred_format(request):
+    if (request.method == POST):
+        return get_preferred_format_for_post(request)
+    else:
+        return get_preferred_format_for_get(request)
+
+def get_preferred_format_for_get(request):
     try:
         accept = request.META["HTTP_ACCEPT"]
     except KeyError:
         accept = formats["data"]["xml"]
     return mimeparse.best_match(get_supported_formats(), accept)
+
+def get_preferred_format_for_post(request):
+    try:
+        ct = request.META["CONTENT_TYPE"]
+        return formats["mime"][ct]
+    except KeyError:
+        return formats["mime"]["default"]
 
 def get_preferred_prefix(request):
     return get_prefix(get_preferred_format(request))
@@ -102,7 +118,13 @@ def get_document_url(uri, prefix, conf=None):
     else:
         return uri.replace(datasetBase, webBase).replace(webResourcePrefix, "%s/" % prefix)
 
-def url_handler(ref, conf):
+def url_handler(request, ref, conf):
+    if (request.method == POST):
+        return url_post_handler(ref, conf)
+    else:
+        return url_get_handler(ref, conf)
+
+def url_get_handler(ref, conf):
     uri = None
     prefix = None
     datasetBase = conf.get_value("datasetBase")
@@ -132,6 +154,11 @@ def url_handler(ref, conf):
                 return uri, prefix
             else:
                 raise ValueError("Unsupportet type '%s'" % splitted[0])
+
+def url_post_handler(ref, conf):
+    datasetBase = conf.get_value("datasetBase")
+    graph = datasetBase + ref
+    return graph
 
 class Http303(HttpResponseRedirect):
     status_code = 303
