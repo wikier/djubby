@@ -21,7 +21,7 @@
 import os
 import logging
 from configuration import Configuration
-from SPARQLWrapper import SPARQLWrapper, JSON
+import sparql
 from django.template import Template, Context
 import rdf
 import ns
@@ -32,33 +32,26 @@ from http import get_document_url
 
 class Resource:
 
-    queries = {
-                "ask"      : "ASK { GRAPH <%s> { <%s> ?p ?o } }",
-                "describe" : "DESCRIBE <%s> FROM <%s>"
-              }
-
     def __init__(self, uri):
         logging.debug("Trying to build resource with URI <%s>..." % uri)
         self.uri = uri2str(uri)
         self.conf = Configuration()
         self.graph = self.conf.graph
         self.endpoint = self.conf.endpoint
-        if (self.__ask__()):
+        if (sparql.ask(self.endpoint, self.graph, self.uri)):
             logging.info("Successfully found the resource with URI <%s> on this dataset" % self.uri)
         else:
             #FIXME: patch to support incosistencies on the URIs
             cleanuri = self.uri
             self.uri = quote(self.uri)
             logging.debug("Not found on the first try, trying the encoded URI  <%s>..." % self.uri)
-            if (self.__ask__()):
+            if (sparql.ask(self.endpoint, self.graph, self.uri)):
                 logging.info("Successfully found the resource with URI <%s> on this dataset" % self.uri)
             else:
                 raise ValueError("Resource with URI <%s> not found on this dataset" % self.uri)            
 
     def get_triples(self):
-        sparql = SPARQLWrapper(self.endpoint)
-        sparql.setQuery(self.queries["describe"] % (self.uri, self.graph))
-        g = sparql.query().convert()
+        g = sparql.describe(self.endpoint, self.graph, self.uri)
         logging.debug("Returning %d triples describing resource <%s>" % (len(g), self.uri))
         #FIXME: enrich with metadata
         for prefix, namespace in self.conf.data.namespaces():
@@ -115,25 +108,6 @@ class Resource:
 
         ctx = Context(data)
         return tpl.render(ctx)
-
-    def __ask__(self):
-        sparql = SPARQLWrapper(self.endpoint)
-        query = self.queries["ask"] % (self.graph, self.uri)
-        sparql.setQuery(query)
-        sparql.setReturnFormat(JSON)
-        results = sparql.query().convert()
-        if (results.has_key("boolean")):
-            # expected answer according SPARQL Protocol
-            if (results["boolean"]):
-                return True
-        elif (results.has_key("results") and results["results"].has_key("bindings") and len(results["results"]["bindings"])>0):
-            # I don't know why, but virtuoso sometimes uses __ask_retval
-            # http://docs.openlinksw.com/virtuoso/rdfsparql.html
-            if (bool(results["results"]["bindings"][0]["__ask_retval"]["value"])):
-                return True
-        else:
-            return False
-        return False
 
     def __get_rows__(self, g):
         rows = {}
