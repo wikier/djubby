@@ -44,7 +44,7 @@ def ask(endpoint, graph, uri):
         return False
     return False
 
-def describe(enpoint, graph, uri):
+def describe(endpoint, graph, uri):
     sparql = SPARQLWrapper(endpoint)
     sparql.setQuery(queries["describe"] % (uri, graph))
     g = sparql.query().convert()
