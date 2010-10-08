@@ -72,5 +72,8 @@ def dispatcher_posts(request, ref, conf):
     if (ref == None or len(ref) == 0):
         logging.debug("no explicit graph, so using the default one")
         graph = conf.get_value("sparqlDefaultGraph")
+    else:
+        graph, prefix = url_handler(ref, conf)
+        print graph, prefix
     return Http501("not yet implemented")
 
