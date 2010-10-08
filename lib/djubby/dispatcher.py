@@ -76,5 +76,5 @@ def dispatcher_posts(request, ref, conf):
         graph = url_handler(request, ref, conf)
         logging.debug("using <%s> graph" % graph)
     format = get_preferred_format(request)
-    data = 
+    data = None
 
