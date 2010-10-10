@@ -168,7 +168,7 @@ def parse_post_request(request, uri=None):
     raw = request.raw_post_data
     logging.debug("Parsing POST request as '%s'..." % format)
     data = parse_rdf(raw, uri, format)
-    logging.debug("Successfully parsed %d triples" % len(data))
+    logging.debug("Successfully parsed %d triples from the request" % len(data))
     return data
 
 class Http303(HttpResponseRedirect):
@@ -177,8 +177,11 @@ class Http303(HttpResponseRedirect):
 class Http307(HttpResponseRedirect):
     status_code = 307
 
-class Http405(Exception):
+class Http406(Exception):
     status_code = 405
+
+class Http405(Exception):
+    status_code = 406
 
 class Http501(Exception):
     status_code = 501

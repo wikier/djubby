@@ -22,7 +22,7 @@ import logging
 from django.http import HttpResponse, Http404
 from configuration import Configuration
 from resource import Resource
-from http import Http303, Http307, Http405, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler, parse_post_request
+from http import Http303, Http307, Http405, Http406, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler, parse_post_request
 from urllib2 import URLError
 
 def dispatcher(request, ref=None):
@@ -75,6 +75,10 @@ def dispatcher_posts(request, ref, conf):
     else:
         graph = url_handler(request, ref, conf)
         logging.debug("Using <%s> graph" % graph)
-    data = parse_post_request(request, graph) 
-    return HttpResponse(len(data), mimetype="text/plain") #FIXME
+    try:
+        data = parse_post_request(request, graph) 
+        return HttpResponse(len(data), mimetype="text/plain") #FIXME
+    except Exception, e:
+        logging.error("Unable to parse POST request as RDF: %s" % e)
+        raise Http406(e)
 
