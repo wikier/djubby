@@ -22,7 +22,7 @@ import logging
 from django.http import HttpResponse, Http404
 from configuration import Configuration
 from resource import Resource
-from http import Http303, Http307, Http405, Http501, get_preferred_format, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler
+from http import Http303, Http307, Http405, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler, parse_post_request
 from urllib2 import URLError
 
 def dispatcher(request, ref=None):
@@ -60,7 +60,7 @@ def dispatcher_gets(request, ref, conf):
             url = get_url()
             logging.debug("Redirecting to the %s representation of %s: %s" % (prefix, uri, url))
             return Http303(url)
-        else:         
+        else:
             output = get_preferred_output(request, prefix)
             func = getattr(resource, "get_%s_%s" % (prefix, output))
             mimetype = get_mimetype(prefix, output)            
@@ -70,11 +70,11 @@ def dispatcher_gets(request, ref, conf):
 def dispatcher_posts(request, ref, conf):
     graph = None
     if (ref == None or len(ref) == 0):
-        logging.debug("no explicit graph, so using the default one")
+        logging.debug("No explicit graph, so using the default one")
         graph = conf.get_value("sparqlDefaultGraph")
     else:
         graph = url_handler(request, ref, conf)
-        logging.debug("using <%s> graph" % graph)
-    format = get_preferred_format(request)
-    data = None
+        logging.debug("Using <%s> graph" % graph)
+    data = parse_post_request(request, graph) 
+    return HttpResponse(len(data), mimetype="text/plain") #FIXME
 

@@ -18,12 +18,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 from configuration import Configuration
 from exceptions import Exception
 import mimeparse
 from sets import Set
 from django.http import HttpResponseRedirect
 from django.utils.datastructures import MultiValueDictKeyError
+from rdf import parse_rdf
 
 formats = {
             "data" : { "default":"application/rdf+xml", "xml":"application/rdf+xml", "n3":"text/n3" },
@@ -160,6 +162,14 @@ def url_post_handler(ref, conf):
     datasetBase = conf.get_value("datasetBase")
     graph = datasetBase + ref
     return graph
+
+def parse_post_request(request, uri=None):
+    format = get_preferred_format(request)
+    raw = request.raw_post_data
+    logging.debug("Parsing POST request as '%s'..." % format)
+    data = parse_rdf(raw, uri, format)
+    logging.debug("Successfully parsed %d triples" % len(data))
+    return data
 
 class Http303(HttpResponseRedirect):
     status_code = 303

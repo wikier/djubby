@@ -49,10 +49,17 @@ def get_predicates(graph, subject=None):
     return graph.predicate_objects(str2uri(subject))
 
 def translate(src, uri, fin="xml", fout="nt"):
-    g = ConjunctiveGraph()
-    g.load(StringIO(src), uri, fin)
+    g = parse_rdf(src, uri, fin)
     return g.serialize(None, fout, uri)    
 
 def rdf2triplepatterns(src, uri, format="xml"):
     return translate(src, uri, format, "nt")
+
+def graph2triplepatterns(src, uri, format="xml"):
+    return translate(src, uri, format, "nt")
+
+def parse_rdf(data, uri, format="xml"):
+    g = ConjunctiveGraph()
+    g.load(StringIO(data), uri, format)
+    return g
 
