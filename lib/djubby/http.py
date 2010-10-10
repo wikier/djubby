@@ -183,6 +183,9 @@ class Http406(Exception):
 class Http405(Exception):
     status_code = 406
 
+class Http500(Exception):
+    status_code = 500
+
 class Http501(Exception):
     status_code = 501
 

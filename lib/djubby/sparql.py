@@ -18,14 +18,17 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
-from SPARQLWrapper import SPARQLWrapper, JSON
+import logging
+from SPARQLWrapper import SPARQLWrapper, JSON, POST
 
 queries = {
             "ask"      : "ASK { GRAPH <%s> { <%s> ?p ?o } }",
-            "describe" : "DESCRIBE <%s> FROM <%s>"
+            "describe" : "DESCRIBE <%s> FROM <%s>",
+            "insert"   : "INSERT INTO GRAPH <%s> { %s }"
           }
 
 def ask(endpoint, graph, uri):
+    logging.debug("Performing ASK query over <%s> SPARQL endpoint" % endpoint)
     sparql = SPARQLWrapper(endpoint)
     query = queries["ask"] % (graph, uri)
     sparql.setQuery(query)
@@ -45,7 +48,18 @@ def ask(endpoint, graph, uri):
     return False
 
 def describe(endpoint, graph, uri):
+    logging.debug("Performing DESCRIBE query over <%s> SPARQL endpoint" % endpoint)
     sparql = SPARQLWrapper(endpoint)
     sparql.setQuery(queries["describe"] % (uri, graph))
     g = sparql.query().convert()
     return g
+
+def insert(endpoint, graph, triples):
+    logging.debug("Performing INSERT query over <%s> SPARQL endpoint" % endpoint)
+    sparql = SPARQLWrapper(endpoint)
+    sparql.setMethod(POST)
+    logging.debug(triples)
+    sparql.setQuery(queries["insert"] % (graph, triples))
+    result = sparql.query().convert()
+    return result
+

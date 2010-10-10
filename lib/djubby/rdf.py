@@ -48,15 +48,18 @@ def get_value(graph, subject=None, predicate=None, lang=None):
 def get_predicates(graph, subject=None):
     return graph.predicate_objects(str2uri(subject))
 
-def translate(src, uri, fin="xml", fout="nt"):
+def translate(graph, fout="nt", base=None):
+    return graph.serialize(None, fout, base)    
+
+def translate_old(src, uri, fin="xml", fout="nt"):
     g = parse_rdf(src, uri, fin)
     return g.serialize(None, fout, uri)    
 
 def rdf2triplepatterns(src, uri, format="xml"):
     return translate(src, uri, format, "nt")
 
-def graph2triplepatterns(src, uri, format="xml"):
-    return translate(src, uri, format, "nt")
+def graph2triplepatterns(graph, base=None):
+    return translate(graph, "nt", base)
 
 def parse_rdf(data, uri, format="xml"):
     g = ConjunctiveGraph()

@@ -22,7 +22,9 @@ import logging
 from django.http import HttpResponse, Http404
 from configuration import Configuration
 from resource import Resource
-from http import Http303, Http307, Http405, Http406, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler, parse_post_request
+from http import Http303, Http307, Http405, Http406, Http500, Http501, get_preferred_prefix, get_preferred_output, get_mimetype, url_handler, parse_post_request
+from sparql import insert
+from rdf import graph2triplepatterns
 from urllib2 import URLError
 
 def dispatcher(request, ref=None):
@@ -69,6 +71,7 @@ def dispatcher_gets(request, ref, conf):
 
 def dispatcher_posts(request, ref, conf):
     graph = None
+    data = None
     if (ref == None or len(ref) == 0):
         logging.debug("No explicit graph, so using the default one")
         graph = conf.get_value("sparqlDefaultGraph")
@@ -77,8 +80,15 @@ def dispatcher_posts(request, ref, conf):
         logging.debug("Using <%s> graph" % graph)
     try:
         data = parse_post_request(request, graph) 
-        return HttpResponse(len(data), mimetype="text/plain") #FIXME
     except Exception, e:
         logging.error("Unable to parse POST request as RDF: %s" % e)
         raise Http406(e)
+
+    try:
+        result = insert(conf.endpoint, graph, graph2triplepatterns(data, graph))
+        return HttpResponse(result, mimetype="text/plain")
+    except URLError, e:
+        logging.error("Unable to insert data on the endpoint: %s" % e)
+        raise Http500(e)
+
 
