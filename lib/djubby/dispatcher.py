@@ -89,6 +89,7 @@ def dispatcher_posts(request, ref, conf):
 
     try:
         result = insert(conf.endpoint, graph, graph2triplepatterns(data, graph))
+        logging.info("Successfully inserted data")
         output = ""
         if (hasattr(result, "toxml")): 
             output = result.toxml()
