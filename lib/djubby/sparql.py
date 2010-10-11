@@ -58,7 +58,6 @@ def insert(endpoint, graph, triples):
     logging.debug("Performing INSERT query over <%s> SPARQL endpoint" % endpoint)
     sparql = SPARQLWrapper(endpoint)
     sparql.setMethod(POST)
-    logging.debug(triples)
     sparql.setQuery(queries["insert"] % (graph, triples))
     result = sparql.query().convert()
     return result
