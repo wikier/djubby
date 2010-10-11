@@ -70,16 +70,27 @@ def dispatcher_gets(request, ref, conf):
             return HttpResponse(func(), mimetype=mimetype)
 
 def dispatcher_posts(request, ref, conf):
-    graph = None
-    data = None
+    #see http://code.google.com/p/djubby/wiki/ReadWriteLinkedData#Graph_Identification
+    #graph = None
+    #if (ref == None or len(ref) == 0):
+    #    logging.debug("No explicit graph, so using the default one")
+    #    graph = conf.get_value("sparqlDefaultGraph")
+    #else:
+    #    graph = url_handler(request, ref, conf)
+    #    logging.debug("Using <%s> graph" % graph)
+
+    graph = conf.get_value("sparqlDefaultGraph")
+    ur = None
     if (ref == None or len(ref) == 0):
-        logging.debug("No explicit graph, so using the default one")
-        graph = conf.get_value("sparqlDefaultGraph")
+        logging.debug("No explicit URI, so using the base one")
+        uri = conf.get_value("datasetBase"),
     else:
-        graph = url_handler(request, ref, conf)
-        logging.debug("Using <%s> graph" % graph)
+        uri = url_handler(request, ref, conf)
+        logging.debug("Using <%s> as base URI" % graph)
+
+    data = None
     try:
-        data = parse_post_request(request, graph) 
+        data = parse_post_request(request, uri) 
     except Exception, e:
         logging.error("Unable to parse POST request as RDF: %s" % e)
         raise Http406(e)
@@ -88,7 +99,7 @@ def dispatcher_posts(request, ref, conf):
         logging.warn("Huge number of triples would generate a too big query for many sparql engines")
 
     try:
-        result = insert(conf.endpoint, graph, graph2triplepatterns(data, graph))
+        result = insert(conf.endpoint, graph, graph2triplepatterns(data, uri))
     except URLError, e:
         logging.error("Unable to insert data to the endpoint: %s" % e)
         raise Http500(e)
