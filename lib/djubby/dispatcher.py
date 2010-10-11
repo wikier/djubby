@@ -84,6 +84,9 @@ def dispatcher_posts(request, ref, conf):
         logging.error("Unable to parse POST request as RDF: %s" % e)
         raise Http406(e)
 
+    if (len(data)>300):
+        logging.warn("Huge number of triples would generate a too big query for many sparql engines")
+
     try:
         result = insert(conf.endpoint, graph, graph2triplepatterns(data, graph))
         output = ""
@@ -93,7 +96,6 @@ def dispatcher_posts(request, ref, conf):
             output = unicode(result)
         return HttpResponse(output, mimetype="text/plain")
     except URLError, e:
-        logging.error("Unable to insert data on the endpoint: %s" % e)
+        logging.error("Unable to insert data to the endpoint: %s" % e)
         raise Http500(e)
-
 
