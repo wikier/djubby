@@ -80,13 +80,13 @@ def dispatcher_posts(request, ref, conf):
     #    logging.debug("Using <%s> graph" % graph)
 
     graph = conf.get_value("sparqlDefaultGraph")
-    ur = None
+    uri = None
     if (ref == None or len(ref) == 0):
         logging.debug("No explicit URI, so using the base one")
         uri = conf.get_value("datasetBase"),
     else:
         uri = url_handler(request, ref, conf)
-        logging.debug("Using <%s> as base URI" % graph)
+        logging.debug("Using <%s> as base URI" % uri)
 
     data = None
     try:
