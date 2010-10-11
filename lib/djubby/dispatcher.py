@@ -86,7 +86,12 @@ def dispatcher_posts(request, ref, conf):
 
     try:
         result = insert(conf.endpoint, graph, graph2triplepatterns(data, graph))
-        return HttpResponse(result, mimetype="text/plain")
+        output = ""
+        if (hasattr(result, "toxml")): 
+            output = result.toxml()
+        else:
+            output = unicode(result)
+        return HttpResponse(output, mimetype="text/plain")
     except URLError, e:
         logging.error("Unable to insert data on the endpoint: %s" % e)
         raise Http500(e)
