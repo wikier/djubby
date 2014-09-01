@@ -1,11 +1,11 @@
 This project is currently **not maintained**, so please use it under your own risk.
 
-# Djubby: a Pubby clone for Django, a Linked Data frontend for SPARQL endpoints
+# Djubby, a Linked Data frontend for SPARQL endpoints
 
 Djubby is a Linked Data frontend for SPARQL endpoints for the Django Web framework.
-It's quite inspired by Richard Cyganiak's Pubby, and with the exception of the HTML
-style, all the code has beed written from scratch due the many differences between 
-languages (Java vs. Python) and the frameworks (JavaEE vs. Django).
+It's quite inspired by Richard Cyganiak's [Pubby](http://wifo5-03.informatik.uni-mannheim.de/pubby/), 
+and with the exception of the HTML style, all the code has beed written from scratch 
+due the many differences between languages (Java vs. Python) and the frameworks (JavaEE vs. Django).
 
 ![djubby](https://raw.githubusercontent.com/wikier/djubby/master/doc/images/djubby.png)
 
