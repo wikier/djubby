@@ -18,12 +18,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Djubby. If not, see <http://www.gnu.org/licenses/>.
 
-__version__ = "0.1.8"
+__version__ = "0.1.9-dev"
 __authors__ = "Sergio Fernández"
 __license__ = "GNU Library or Lesser General Public License (LGPL) v3"
 __contact__ = "sergio@wikier.org"
-__date__    = "2010-04-28"
-__agent__   = "djubby %s (http://djubby.googlecode.com/)" % __version__
+__date__    = "2014-09-01"
+__agent__   = "djubby %s (http://github.com/wikier/djubby)" % __version__
 
 # Some common stuff for network:
 import socket
