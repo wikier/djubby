@@ -9,9 +9,9 @@ languages (Java vs. Python) and the frameworks (JavaEE vs. Django).
 
 More information at: https://github.com/wikier/djubby
 
-## Authors
+## Status
 
-*  Sergio Fernández <sergio@wikier.org>
+This project is currently *not maintained*, so please use it under your own risk.
 
 ## Features
 
@@ -43,6 +43,10 @@ More information at: https://github.com/wikier/djubby
 
     cd lib/
     sudo python setup.py install
+
+## Authors
+
+* [Sergio Fernández](http://www.wikier.org)
 
 ## License
 
