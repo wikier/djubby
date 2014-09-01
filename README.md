@@ -6,6 +6,8 @@ It's quite inspired by Richard Cyganiak's Pubby, and with the exception of the H
 style, all the code has beed written from scratch due the many differences between 
 languages (Java vs. Python) and the frameworks (JavaEE vs. Django).
 
+![djubby](https://raw.githubusercontent.com/wikier/djubby/master/doc/images/djubby.png)
+
 More information at: https://github.com/wikier/djubby
 
 == Authors ==
@@ -20,9 +22,11 @@ More information at: https://github.com/wikier/djubby
 * Takes care of handling 303 redirects and content negotiation.
 * Compatible with the Django Web framework.
 
-Planned: Include a metadata extension to add metadata to the provided data.
+=== Planned ===
 
-== Limitations ==
+* Include a metadata extension to add metadata to the provided data.
+
+=== Limitations ===
 
 * Only works for SPARQL endpoint that can answer ASK and DESCRIBE queries.
 * Multiple dataset support may not work as expected, so it is recommended to simply set up a separate djubby instance for each dataset.
